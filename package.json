@@ -1,4 +1,7 @@
 {
+  "name": "yanomas",
+  "version": "1.0.0",
+  "description": "YaNoMas es una herramienta tecnológica que consiste en una aplicación móvil que se basa en la solidaridad entre mujeres para generar una red que permita visibilizar y prevenir delitos.",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -6,6 +9,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ce-force/App-YaNoMas"
   },
   "dependencies": {
     "expo": "~39.0.2",
@@ -18,5 +25,14 @@
   "devDependencies": {
     "@babel/core": "~7.9.0"
   },
-  "private": true
+  "keywords": [
+    "yanomas",
+    "app yanomas",
+    "costa rica",
+    "feminismo",
+    "herramienta tecnologica",
+    "apoyo a la mujer"
+  ],
+  "author": "Equipo CE-FORCE",
+  "license": "MIT"
 }
