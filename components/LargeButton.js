@@ -15,11 +15,12 @@ export const LargeButton = ({ onPress, title }) => (
             style={[styles.signIn, {
                 borderColor: theme.COLORS.SECONDARY,
                 borderWidth: 1,
-                marginTop: 15
+                marginTop: 15,
+                backgroundColor: theme.COLORS.SECONDARY
             }]}
         >
             <Text style={[styles.textSign, {
-                color: theme.COLORS.SECONDARY
+                color: theme.COLORS.WHITE
             }]}>{title}</Text>
         </TouchableOpacity>
     </View>
@@ -29,15 +30,16 @@ export const LargeButton = ({ onPress, title }) => (
 const styles = StyleSheet.create({
     button: {
         alignItems: 'center',
-        marginTop: 30,
-        marginBottom: 20
+        marginTop: 10,
+        marginBottom: 10,
     },
     signIn: {
         width: '100%',
         height: 50,
         justifyContent: 'center',
         alignItems: 'center',
-        borderRadius: 10
+        borderRadius: 10,
+        elevation: 5
     },
     textSign: {
         fontSize: 18,

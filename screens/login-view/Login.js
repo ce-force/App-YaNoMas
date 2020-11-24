@@ -159,6 +159,8 @@ const Login = ({navigation}) => {
                     </Animatable.View>
                 }
 
+                <LargeButton title="dada" />
+
 
                 <Text style={[styles.text_footer, {
                     color: theme.COLORS.BLACK,
