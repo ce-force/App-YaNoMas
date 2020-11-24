@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontFamily: "Montserrat",
     fontSize: 32,
   },
 });

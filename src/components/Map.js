@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import MapView, { Marker } from "react-native-maps";
 import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 
 const Map = (props) => {
   return (
@@ -11,7 +12,7 @@ const Map = (props) => {
         style={styles.mapStyle}
       >
         <Marker
-          pinColor="#8E44B4"
+          pinColor="purple"
           draggable
           title="Ubicación actual"
           description="Ubicación actual"
@@ -19,7 +20,9 @@ const Map = (props) => {
           onDragEnd={(event) =>
             props.changeLocation(event.nativeEvent.coordinate)
           }
-        ></Marker>
+        >
+          <FontAwesome name="map-marker" size={60} color="purple" />
+        </Marker>
       </MapView>
     </View>
   );
@@ -28,7 +31,7 @@ const Map = (props) => {
 const styles = StyleSheet.create({
   container: {
     borderRadius: 8,
-    margin: 12,
+    margin: 4,
     elevation: 1,
     overflow: "hidden",
   },
