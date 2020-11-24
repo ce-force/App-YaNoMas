@@ -5,7 +5,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { Block } from "galio-framework";
 
 // screens
 import Circle from '../screens/circle/Circle';
@@ -19,8 +18,7 @@ import User from '../screens/user/Profile';
 import CustomDrawerContent from "./Menu";
 
 // header for screens
-import { Icon, Header } from "../components";
-import { argonTheme, tabs } from "../constants";
+import Header from "@react-navigation/stack/src/views/Header/Header";
 const { width } = Dimensions.get("screen");
 
 const Stack = createStackNavigator();
@@ -103,12 +101,12 @@ function ElementsStack(props) {
     );
   }
 
-  export default function OnboardingStack(props) {
+  function OnboardingStack(props) {
     return (
       <Stack.Navigator mode="card" headerMode="none">
         <Stack.Screen
           name="Onboarding"
-          component={Onboarding}
+          component={Login}
           option={{
             headerTransparent: true
           }}
@@ -117,7 +115,7 @@ function ElementsStack(props) {
       </Stack.Navigator>
     );
   }
-  
+
   function AppStack(props) {
     return (
       <Drawer.Navigator
@@ -157,3 +155,16 @@ function ElementsStack(props) {
       </Drawer.Navigator>
     );
   }
+
+  const RootStack = ({navigation}) => {
+      return (
+          <Stack.Navigator mode="card" headerMode="screen">
+              <Stack.Screen name='Login' component={Login} />
+              <Stack.Screen name='Register' component={Register} />
+              <Stack.Screen name='Profile' component={ProfileStack} />
+          </Stack.Navigator>
+      );
+  }
+
+
+export default RootStack;

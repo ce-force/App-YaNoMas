@@ -5,10 +5,9 @@ import {
   StyleSheet,
   Image
 } from "react-native";
-import { Block, Text, theme } from "galio-framework";
 
 import Images from "../constants/Images";
-import { DrawerItem as DrawerCustomItem } from '../components';
+import { DrawerItem as DrawerCustomItem } from '@react-navigation/drawer';
 
 function CustomDrawerContent({ drawerPosition, navigation, profile, focused, state, ...rest }) {
   const insets = useSafeArea();
@@ -56,8 +55,8 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: 28,
-    paddingBottom: theme.SIZES.BASE,
-    paddingTop: theme.SIZES.BASE * 3,
+    paddingBottom: 20,
+    paddingTop: 20,
     justifyContent: 'center'
   }
 });
