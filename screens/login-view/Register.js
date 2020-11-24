@@ -14,6 +14,8 @@ import {
 import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
+import theme from '../../constants/Theme'
+import LargeButton from "../../components/LargeButton";
 
 const Register = ({navigation}) => {
 
@@ -72,7 +74,7 @@ const Register = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor='#009387' barStyle="light-content"/>
+            <StatusBar backgroundColor={theme.COLORS.SECONDARY} barStyle="light-content"/>
             <View style={styles.header}>
                 <Text style={styles.text_header}>Register Now!</Text>
             </View>
@@ -182,25 +184,25 @@ const Register = ({navigation}) => {
                         </Text>
                         <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>{" "}Términos y condiciones</Text>
                         <Text style={styles.color_textPrivate}>{" "}y</Text>
-                        <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>{" "}Politica de privaidad</Text>
+                        <Text style={[styles.color_textPrivate, {fontWeight: 'bold'}]}>{" "}Politica de privacidad</Text>
                     </View>
                     <View style={styles.button}>
                         <TouchableOpacity
                             style={styles.signIn}
                             onPress={() => {}}
-                        ><Text style={{color: '#009387', marginTop:15}}>Ingresar</Text>
+                        ><Text style={{color: theme.COLORS.SECONDARY, marginTop:15}}>Ingresar</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             onPress={() => navigation.goBack()}
                             style={[styles.signIn, {
-                                borderColor: '#009387',
+                                borderColor: theme.COLORS.SECONDARY,
                                 borderWidth: 1,
                                 marginTop: 15
                             }]}
                         >
                             <Text style={[styles.textSign, {
-                                color: '#009387'
+                                color: theme.COLORS.SECONDARY
                             }]}>Registrarse</Text>
                         </TouchableOpacity>
                     </View>
@@ -215,7 +217,7 @@ export default Register;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#009387'
+        backgroundColor: theme.COLORS.SECONDARY
     },
     header: {
         flex: 1,
@@ -237,7 +239,7 @@ const styles = StyleSheet.create({
         fontSize: 30
     },
     text_footer: {
-        color: '#05375a',
+        color: theme.COLORS.BLACK,
         fontSize: 18
     },
     action: {
@@ -251,7 +253,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
-        color: '#05375a',
+        color: theme.COLORS.BLACK,
     },
     button: {
         alignItems: 'center',

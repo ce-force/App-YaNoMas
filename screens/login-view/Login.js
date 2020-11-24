@@ -15,8 +15,9 @@ import Feather from 'react-native-vector-icons/Feather';
 
 import { useTheme } from 'react-native-paper';
 
-
+import theme from '../../constants/Theme'
 import Users from '../../model/users';
+import {LargeButton} from "../../components/LargeButton";
 
 const Login = ({navigation}) => {
 
@@ -29,7 +30,6 @@ const Login = ({navigation}) => {
         isValidPassword: true,
     });
 
-    const { colors } = useTheme();
 
 
     const textInputChange = (val) => {
@@ -94,47 +94,48 @@ const Login = ({navigation}) => {
         } );
 
         if ( data.username.length == 0 || data.password.length == 0 ) {
-            Alert.alert('Wrong Input!', 'Username or password field cannot be empty.', [
+            Alert.alert('Error!', 'Todos los campos son obligatorios.', [
                 {text: 'Okay'}
             ]);
             return;
         }
 
         if ( foundUser.length == 0 ) {
-            Alert.alert('Invalid User!', 'Username or password is incorrect.', [
+            Alert.alert('Usuario inválido', 'Usuario o contraseña incorrectos.', [
                 {text: 'Okay'}
             ]);
             return;
         }
         signIn(foundUser);
-    }
+    };
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor='#009387' barStyle="light-content"/>
+            <StatusBar backgroundColor={theme.COLORS.BLACK} barStyle="light-content"/>
             <View style={styles.header}>
-                <Text style={styles.text_header}>Welcome!</Text>
+                <Text style={styles.text_header}>Bienvenid@</Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
                 style={[styles.footer, {
-                    backgroundColor: colors.background
+                    backgroundColor: theme.COLORS.WHITE
                 }]}
             >
+
                 <Text style={[styles.text_footer, {
-                    color: colors.text
-                }]}>Username</Text>
+                    color: theme.COLORS.BLACK
+                }]}>Usuario</Text>
                 <View style={styles.action}>
                     <FontAwesome
                         name="user-o"
-                        color={colors.text}
+                        color={theme.COLORS.SECONDARY}
                         size={20}
                     />
                     <TextInput
-                        placeholder="Your Username"
+                        placeholder="Su usuario"
                         placeholderTextColor="#666666"
                         style={[styles.textInput, {
-                            color: colors.text
+                            color: theme.COLORS.BLACK
                         }]}
                         autoCapitalize="none"
                         onChangeText={(val) => textInputChange(val)}
@@ -154,27 +155,27 @@ const Login = ({navigation}) => {
                 </View>
                 { data.isValidUser ? null :
                     <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>Username must be 4 characters long.</Text>
+                        <Text style={styles.errorMsg}>El usuario debe tener al menos 4 caracteres</Text>
                     </Animatable.View>
                 }
 
 
                 <Text style={[styles.text_footer, {
-                    color: colors.text,
+                    color: theme.COLORS.BLACK,
                     marginTop: 35
                 }]}>Password</Text>
                 <View style={styles.action}>
                     <Feather
                         name="lock"
-                        color={colors.text}
+                        color={theme.COLORS.SECONDARY}
                         size={20}
                     />
                     <TextInput
-                        placeholder="Your Password"
+                        placeholder="Su contraseña"
                         placeholderTextColor="#666666"
                         secureTextEntry={data.secureTextEntry ? true : false}
                         style={[styles.textInput, {
-                            color: colors.text
+                            color: theme.COLORS.BLACK
                         }]}
                         autoCapitalize="none"
                         onChangeText={(val) => handlePasswordChange(val)}
@@ -205,25 +206,25 @@ const Login = ({navigation}) => {
 
 
                 <TouchableOpacity>
-                    <Text style={{color: '#009387', marginTop:15}}>Forgot password?</Text>
+                    <Text style={{color: theme.COLORS.SECONDARY, marginTop:15}}>Forgot password?</Text>
                 </TouchableOpacity>
                 <View style={styles.button}>
                     <TouchableOpacity
                         style={styles.signIn}
                         onPress={() => {loginHandle( data.username, data.password )}}
-                    ><Text style={{color: '#009387', marginTop:15}}>Ingresar</Text>
+                    ><Text style={{color: theme.COLORS.SECONDARY, marginTop:15}}>Ingresar</Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         onPress={() => navigation.navigate('Register')}
                         style={[styles.signIn, {
-                            borderColor: '#009387',
+                            borderColor: theme.COLORS.SECONDARY,
                             borderWidth: 1,
                             marginTop: 15
                         }]}
                     >
                         <Text style={[styles.textSign, {
-                            color: '#009387'
+                            color: theme.COLORS.SECONDARY
                         }]}>Resgistrarse</Text>
                     </TouchableOpacity>
                 </View>
@@ -237,13 +238,13 @@ export default Login;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#009387'
+        backgroundColor: theme.COLORS.SECONDARY
     },
     header: {
         flex: 1,
         justifyContent: 'flex-end',
         paddingHorizontal: 20,
-        paddingBottom: 50
+        paddingBottom: 0
     },
     footer: {
         flex: 3,
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
         fontSize: 30
     },
     text_footer: {
-        color: '#05375a',
+        color: theme.COLORS.SECONDARY,
         fontSize: 18
     },
     action: {
@@ -273,17 +274,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginTop: 10,
         borderBottomWidth: 1,
-        borderBottomColor: '#FF0000',
+        borderBottomColor: theme.COLORS.ERROR,
         paddingBottom: 5
     },
     textInput: {
         flex: 1,
         marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
-        color: '#05375a',
+        color: theme.COLORS.SECONDARY,
     },
     errorMsg: {
-        color: '#FF0000',
+        color: theme.COLORS.ERROR,
         fontSize: 14,
     },
     button: {
