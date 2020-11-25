@@ -13,16 +13,18 @@ import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 
-import { useTheme } from 'react-native-paper';
+import firebase from 'firebase';
 
 import theme from '../../constants/Theme'
 import Users from '../../model/users';
 import {LargeButton} from "../../components/LargeButton";
 
+
 const Login = ({navigation}) => {
 
+    // Variables
     const [data, setData] = React.useState({
-        username: '',
+        email: '',
         password: '',
         check_textInputChange: false,
         secureTextEntry: true,
@@ -30,25 +32,34 @@ const Login = ({navigation}) => {
         isValidPassword: true,
     });
 
-
+    // If the user is already logged in, send him to profile screen
+    const verifyLoggedIn = () => {
+        firebase.auth.onAuthStateChanged(user => {
+            if (user){
+                navigation.navigate('Profile');
+            }else{
+                navigation.navigate('Login');
+            }
+        })
+    };
 
     const textInputChange = (val) => {
         if( val.trim().length >= 4 ) {
             setData({
                 ...data,
-                username: val,
+                email: val,
                 check_textInputChange: true,
                 isValidUser: true
             });
         } else {
             setData({
                 ...data,
-                username: val,
+                email: val,
                 check_textInputChange: false,
                 isValidUser: false
             });
         }
-    }
+    };
 
     const handlePasswordChange = (val) => {
         if( val.trim().length >= 8 ) {
@@ -64,14 +75,14 @@ const Login = ({navigation}) => {
                 isValidPassword: false
             });
         }
-    }
+    };
 
     const updateSecureTextEntry = () => {
         setData({
             ...data,
             secureTextEntry: !data.secureTextEntry
         });
-    }
+    };
 
     const handleValidUser = (val) => {
         if( val.trim().length >= 4 ) {
@@ -85,28 +96,22 @@ const Login = ({navigation}) => {
                 isValidUser: false
             });
         }
+    };
+
+    function signIn(foundUser) {
+        Alert.alert('Listo!', 'Bienvenid@.', [
+            {text: 'Okay'}
+        ]);
     }
 
-    const loginHandle = (userName, password) => {
-
-        const foundUser = Users.filter( item => {
-            return userName == item.username && password == item.password;
-        } );
-
-        if ( data.username.length == 0 || data.password.length == 0 ) {
-            Alert.alert('Error!', 'Todos los campos son obligatorios.', [
+    const loginHandle = (email, password) => {
+        firebase.auth().signInWithEmailAndPassword(email, password)
+            .then(() => {
+                Alert.alert('Listo!', 'Bienvenid@.', [
                 {text: 'Okay'}
             ]);
-            return;
-        }
-
-        if ( foundUser.length == 0 ) {
-            Alert.alert('Usuario inválido', 'Usuario o contraseña incorrectos.', [
-                {text: 'Okay'}
-            ]);
-            return;
-        }
-        signIn(foundUser);
+                navigation.navigate('Profile');
+                }, (error) => { Alert.alert(error.message); });
     };
 
     return (
@@ -159,8 +164,6 @@ const Login = ({navigation}) => {
                     </Animatable.View>
                 }
 
-                <LargeButton title="dada" />
-
 
                 <Text style={[styles.text_footer, {
                     color: theme.COLORS.BLACK,
@@ -175,7 +178,7 @@ const Login = ({navigation}) => {
                     <TextInput
                         placeholder="Su contraseña"
                         placeholderTextColor="#666666"
-                        secureTextEntry={data.secureTextEntry ? true : false}
+                        secureTextEntry={data.secureTextEntry}
                         style={[styles.textInput, {
                             color: theme.COLORS.BLACK
                         }]}
@@ -213,22 +216,14 @@ const Login = ({navigation}) => {
                 <View style={styles.button}>
                     <TouchableOpacity
                         style={styles.signIn}
-                        onPress={() => {loginHandle( data.username, data.password )}}
-                    ><Text style={{color: theme.COLORS.SECONDARY, marginTop:15}}>Ingresar</Text>
+                        onPress={() => navigation.navigate('Register')}
+
+                    ><Text style={{color: theme.COLORS.SECONDARY, marginTop:15}}>Crear una cuenta</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                        onPress={() => navigation.navigate('Register')}
-                        style={[styles.signIn, {
-                            borderColor: theme.COLORS.SECONDARY,
-                            borderWidth: 1,
-                            marginTop: 15
-                        }]}
-                    >
-                        <Text style={[styles.textSign, {
-                            color: theme.COLORS.SECONDARY
-                        }]}>Resgistrarse</Text>
-                    </TouchableOpacity>
+                    <LargeButton
+                        onPress={() => {loginHandle( data.email, data.password )}}
+                        title="Ingresar"/>
                 </View>
             </Animatable.View>
         </View>
@@ -288,21 +283,5 @@ const styles = StyleSheet.create({
     errorMsg: {
         color: theme.COLORS.ERROR,
         fontSize: 14,
-    },
-    button: {
-        alignItems: 'center',
-        marginTop: 30,
-        marginBottom: 20
-    },
-    signIn: {
-        width: '100%',
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10
-    },
-    textSign: {
-        fontSize: 18,
-        fontWeight: 'bold'
     }
 });

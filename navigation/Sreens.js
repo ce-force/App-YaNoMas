@@ -12,7 +12,7 @@ import CircleRequests from '../screens/circle/CircleRequests';
 import Emergency from '../screens/emergency/Emergency';
 import Login from '../screens/login-view/Login';
 import Register from '../screens/login-view/Register';
-import User from '../screens/user/Profile';
+import Profile from '../screens/user/Profile';
 
 // drawer
 import CustomDrawerContent from "./Menu";
@@ -80,23 +80,6 @@ function ElementsStack(props) {
             headerTransparent: true
           }}
         />
-              <Stack.Screen
-          name="Pro"
-          component={Pro}
-          options={{
-            header: ({ navigation, scene }) => (
-              <Header
-                title=""
-                back
-                white
-                transparent
-                navigation={navigation}
-                scene={scene}
-              />
-            ),
-            headerTransparent: true
-          }}
-        />
       </Stack.Navigator>
     );
   }
@@ -161,7 +144,7 @@ function ElementsStack(props) {
           <Stack.Navigator mode="card" headerMode="screen">
               <Stack.Screen name='Login' component={Login} />
               <Stack.Screen name='Register' component={Register} />
-              <Stack.Screen name='Profile' component={ProfileStack} />
+              <Stack.Screen name='Profile' component={Profile} />
           </Stack.Navigator>
       );
   }

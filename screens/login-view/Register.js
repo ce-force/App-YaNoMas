@@ -9,18 +9,19 @@ import {
     Platform,
     StyleSheet,
     ScrollView,
-    StatusBar
+    StatusBar, Alert
 } from 'react-native';
 import * as Animatable from 'react-native-animatable';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Feather from 'react-native-vector-icons/Feather';
 import theme from '../../constants/Theme'
-import LargeButton from "../../components/LargeButton";
+import {LargeButton} from "../../components/LargeButton";
+import firebase from "firebase";
 
 const Register = ({navigation}) => {
 
     const [data, setData] = React.useState({
-        username: '',
+        email: '',
         password: '',
         confirm_password: '',
         check_textInputChange: false,
@@ -32,24 +33,24 @@ const Register = ({navigation}) => {
         if( val.length !== 0 ) {
             setData({
                 ...data,
-                username: val,
+                email: val,
                 check_textInputChange: true
             });
         } else {
             setData({
                 ...data,
-                username: val,
+                email: val,
                 check_textInputChange: false
             });
         }
-    }
+    };
 
     const handlePasswordChange = (val) => {
         setData({
             ...data,
             password: val
         });
-    }
+    };
 
     const handleConfirmPasswordChange = (val) => {
         setData({
@@ -72,18 +73,23 @@ const Register = ({navigation}) => {
         });
     }
 
+    function signInHandle(email, password) {
+        firebase.auth().createUserWithEmailAndPassword(email, password)
+            .then(() => { }, (error) => { Alert.alert(error.message); });
+    }
+
     return (
         <View style={styles.container}>
             <StatusBar backgroundColor={theme.COLORS.SECONDARY} barStyle="light-content"/>
             <View style={styles.header}>
-                <Text style={styles.text_header}>Register Now!</Text>
+                <Text style={styles.text_header}>¡Ingresar ahora!</Text>
             </View>
             <Animatable.View
                 animation="fadeInUpBig"
                 style={styles.footer}
             >
                 <ScrollView>
-                    <Text style={styles.text_footer}>Username</Text>
+                    <Text style={styles.text_footer}>Correo electrónico</Text>
                     <View style={styles.action}>
                         <FontAwesome
                             name="user-o"
@@ -91,7 +97,7 @@ const Register = ({navigation}) => {
                             size={20}
                         />
                         <TextInput
-                            placeholder="Your Username"
+                            placeholder="Correo electrónico"
                             style={styles.textInput}
                             autoCapitalize="none"
                             onChangeText={(val) => textInputChange(val)}
@@ -111,7 +117,35 @@ const Register = ({navigation}) => {
 
                     <Text style={[styles.text_footer, {
                         marginTop: 35
-                    }]}>Password</Text>
+                    }]}>Número de Cédula</Text>
+                    <View style={styles.action}>
+                        <FontAwesome
+                            name="user-o"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="Número de Cédula"
+                            style={styles.textInput}
+                            autoCapitalize="none"
+                            onChangeText={(val) => textInputChange(val)}
+                        />
+                        {data.check_textInputChange ?
+                            <Animatable.View
+                                animation="bounceIn"
+                            >
+                                <Feather
+                                    name="check-circle"
+                                    color="green"
+                                    size={20}
+                                />
+                            </Animatable.View>
+                            : null}
+                    </View>
+
+                    <Text style={[styles.text_footer, {
+                        marginTop: 35
+                    }]}>Contraseña</Text>
                     <View style={styles.action}>
                         <Feather
                             name="lock"
@@ -119,7 +153,7 @@ const Register = ({navigation}) => {
                             size={20}
                         />
                         <TextInput
-                            placeholder="Your Password"
+                            placeholder="Contraseña"
                             secureTextEntry={data.secureTextEntry ? true : false}
                             style={styles.textInput}
                             autoCapitalize="none"
@@ -144,40 +178,6 @@ const Register = ({navigation}) => {
                         </TouchableOpacity>
                     </View>
 
-                    <Text style={[styles.text_footer, {
-                        marginTop: 35
-                    }]}>Confirm Password</Text>
-                    <View style={styles.action}>
-                        <Feather
-                            name="lock"
-                            color="#05375a"
-                            size={20}
-                        />
-                        <TextInput
-                            placeholder="Confirm Your Password"
-                            secureTextEntry={data.confirm_secureTextEntry ? true : false}
-                            style={styles.textInput}
-                            autoCapitalize="none"
-                            onChangeText={(val) => handleConfirmPasswordChange(val)}
-                        />
-                        <TouchableOpacity
-                            onPress={updateConfirmSecureTextEntry}
-                        >
-                            {data.secureTextEntry ?
-                                <Feather
-                                    name="eye-off"
-                                    color="grey"
-                                    size={20}
-                                />
-                                :
-                                <Feather
-                                    name="eye"
-                                    color="grey"
-                                    size={20}
-                                />
-                            }
-                        </TouchableOpacity>
-                    </View>
                     <View style={styles.textPrivate}>
                         <Text style={styles.color_textPrivate}>
                             Al registarse está de acuerdo con nuestros
@@ -189,22 +189,13 @@ const Register = ({navigation}) => {
                     <View style={styles.button}>
                         <TouchableOpacity
                             style={styles.signIn}
-                            onPress={() => {}}
-                        ><Text style={{color: theme.COLORS.SECONDARY, marginTop:15}}>Ingresar</Text>
+                            onPress={() => navigation.goBack()}
+                        ><Text style={{color: theme.COLORS.SECONDARY, marginTop:15}}>Ya tengo una cuenta</Text>
                         </TouchableOpacity>
 
-                        <TouchableOpacity
-                            onPress={() => navigation.goBack()}
-                            style={[styles.signIn, {
-                                borderColor: theme.COLORS.SECONDARY,
-                                borderWidth: 1,
-                                marginTop: 15
-                            }]}
-                        >
-                            <Text style={[styles.textSign, {
-                                color: theme.COLORS.SECONDARY
-                            }]}>Registrarse</Text>
-                        </TouchableOpacity>
+                        <LargeButton
+                            onPress={() => {signInHandle( data.email, data.password )}}
+                            title="Registrarse"/>
                     </View>
                 </ScrollView>
             </Animatable.View>
@@ -255,17 +246,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         color: theme.COLORS.BLACK,
     },
-    button: {
-        alignItems: 'center',
-        marginTop: 50
-    },
-    signIn: {
-        width: '100%',
-        height: 50,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10
-    },
+
     textSign: {
         fontSize: 18,
         fontWeight: 'bold'
