@@ -1,50 +1,31 @@
 import React from "react";
-import { createAppContainer } from "react-navigation";
-import { createBottomTabNavigator } from "react-navigation-tabs";
-import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import HomeScreen from "./src/screens/HomeScreen";
-import Theme from "./src/constants/Theme";
-import SettingsScreen from "./src/screens/SettingsScreen";
-import CrimesScreen from "./src/screens/CrimesScreen";
-import CircleScreen from "./src/screens/CircleSceen";
 import Login from "./src/screens/login/Login";
+import {createStackNavigator, HeaderBackButton} from "@react-navigation/stack";
+import Register from "./src/screens/login/Register";
+import {
+    NavigationContainer,
+} from '@react-navigation/native';
+import * as firebase from "firebase";
+import {firebaseConfig} from "./config/FirebaseConfig";
+import TabNavigator from "./src/components/TabNavigator";
 
+// Initialize firebase app once
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
 
-const TabNavigator = createBottomTabNavigator(
-  {
-    Home: HomeScreen,
-    Circle: CircleScreen,
-    Crimes: CrimesScreen,
-    Settings: SettingsScreen
-  },
-  {
-    defaultNavigationOptions: ({ navigation }) => ({
-      tabBarIcon: ({ tintColor }) => {
-        const { routeName } = navigation.state;
-        let iconName = "home";
-        switch (routeName) {
-          case "Home":
-            iconName = "home";
-            break;
-          case "Circle":
-            iconName = "circle";
-            break;
-          case "Crimes":
-            iconName = "fire";
-            break;
-          case "Settings":
-            iconName = "settings";
-            break;
-        }
+const Stack = createStackNavigator();
 
-        return <Icon name={iconName} size={25} color={tintColor} />;
-      }
-    }),
-    tabBarOptions: {
-      activeTintColor: Theme.COLORS.DEFAULT,
-      inactiveTintColor: Theme.COLORS.GRAY
-    }
-  }
-);
+const App = () => {
+    return (
+        <NavigationContainer>
+            <Stack.Navigator mode="card">
+                <Stack.Screen name='Login' component={Login} />
+                <Stack.Screen name='Register' component={Register} />
+                <Stack.Screen name='TabNavigator' component={TabNavigator} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    );
+};
 
-export default createAppContainer(TabNavigator);
+export default App;
