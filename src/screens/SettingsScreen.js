@@ -18,6 +18,8 @@ import { StackNavigator } from 'react-navigation';
 import currentTeme from "../constants/Theme";
 import { HeaderHeight, AppVersion, TeamName } from "../constants/utils";
 import Images from "../constants/Images";
+import { NavigationActions } from 'react-navigation';
+import AccountScreen from './Settings/AccountScreen';
 
 
 const { width, height } = Dimensions.get("screen");
@@ -68,11 +70,6 @@ const showToast = (icon) => {
   ToastAndroid.show(icon, ToastAndroid.SHORT);
 };
 
-const logOut = () => {
-  ToastAndroid.show("Cerrando Sesión...", ToastAndroid.SHORT);
-};
-
-
 function navigate(icon_name){
   switch (icon_name) {
     case "bell":
@@ -86,7 +83,6 @@ function navigate(icon_name){
       break;
     case "account":
       showToast("CUENTA");
-      navigate.
       break;
     case "key":
       showToast("PRIVACIDAD Y SEGURIDAD");
@@ -190,6 +186,7 @@ function SettingsScreen(){
               </Block>
 
             </Block>
+
 
             <Block middle style={{ marginTop: 30, marginBottom: 16 }}>
                 <Block style={styles.divider} />
