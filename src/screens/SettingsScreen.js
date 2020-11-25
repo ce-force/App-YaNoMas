@@ -19,7 +19,6 @@ import currentTeme from "../constants/Theme";
 import { HeaderHeight, AppVersion, TeamName } from "../constants/utils";
 import Images from "../constants/Images";
 
-import AccountScreen from './Settings/AccountScreen';
 
 const { width, height } = Dimensions.get("screen");
 const thumbMeasure = (width - 48 - 32) / 3;
@@ -87,6 +86,7 @@ function navigate(icon_name){
       break;
     case "account":
       showToast("CUENTA");
+      navigate.
       break;
     case "key":
       showToast("PRIVACIDAD Y SEGURIDAD");

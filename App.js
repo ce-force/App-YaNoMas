@@ -7,6 +7,8 @@ import Theme from "./src/constants/Theme";
 import SettingsScreen from "./src/screens/SettingsScreen";
 import CrimesScreen from "./src/screens/CrimesScreen";
 import CircleScreen from "./src/screens/CircleSceen";
+import Login from "./src/screens/login/Login";
+
 
 const TabNavigator = createBottomTabNavigator(
   {
