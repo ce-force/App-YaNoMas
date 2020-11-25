@@ -8,13 +8,15 @@ import SettingsScreen from "./src/screens/SettingsScreen";
 import CrimesScreen from "./src/screens/CrimesScreen";
 import CircleScreen from "./src/screens/CircleSceen";
 import Login from "./src/screens/login/Login";
+import InformationScreen from "./src/screens/InformationScreen";
 
 
 const TabNavigator = createBottomTabNavigator(
   {
     Home: HomeScreen,
-    Circle: CircleScreen,
     Crimes: CrimesScreen,
+    Circle: CircleScreen,
+    Info: InformationScreen,
     Settings: SettingsScreen
   },
   {
@@ -30,7 +32,10 @@ const TabNavigator = createBottomTabNavigator(
             iconName = "circle";
             break;
           case "Crimes":
-            iconName = "fire";
+            iconName = "pistol";
+            break;
+          case "Info":
+            iconName = "information-variant";
             break;
           case "Settings":
             iconName = "settings";
