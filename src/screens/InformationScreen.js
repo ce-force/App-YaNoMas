@@ -1,75 +1,46 @@
 import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, FlatList } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, FlatList, Image } from "react-native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import currentTeme from "../constants/Theme";
 
+import { Card } from 'react-native-elements'
 
-const DATA = [
-  {
-    id:"yanomas-v1.0.0-info-001",
-    title: "Material Divulgativo #1",
-    icon: "information"
-  },
-  {
-    id:"yanomas-v1.0.0-info-002",
-    title: "Material Divulgativo #2",
-    icon: "information"
-  },
-  {
-    id:"yanomas-v1.0.0-info-003",
-    title: "Material Divulgativo #3",
-    icon: "information"
-  },
-  {
-    id:"yanomas-v1.0.0-info-004",
-    title: "Material Divulgativo #4",
-    icon: "information"
-  },
-  {
-    id:"yanomas-v1.0.0-info-005",
-    title: "Material Divulgativo #5",
-    icon: "information"
-  }
-]
 
-function Item({ title, icon }) {
+const customData = require('../../assets/MessageData.json');
+
+function Item({ title, image, message }) {
   return (
-    <View style={styles.item}>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between"
-        }}
-      >
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row"
-          }}
-        >
-        <Icon
-          name={icon}
-          size={25}
-          color={currentTeme.COLORS.DEFAULT}
-        />
-        <Text style={styles.title} >{title}</Text>
-      </View>
+
+    <View>
+        <Card>
+            <Card.Title>{title}</Card.Title>
+            <Card.Divider/>
+            <Text style={{marginBottom: 10}}>
+                {message}
+            </Text>
+            <Card.Divider/>
+
+            <Card.Image source={{ uri: image.toString(), width: 32, height: 32, }} />
+
+
+        </Card>
+
     </View>
-    </View>
-  );
+
+);
+
 }
 
 function InformationScreen(){
     return (
         <View style={styles.container}>
             <FlatList
-              data={DATA}
+              data={customData}
               renderItem={({ item }) => (
                 <Item
-                  title={item.title}
-                  icon={item.icon}
-                />
+                    title={item.title}
+                    image={item.image}
+                    message={item.message}/>
               )}
               keyExtractor={item => item.id}
             />

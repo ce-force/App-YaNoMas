@@ -1,0 +1,62 @@
+[
+  {
+    "id": 0,
+    "title": "Información relevante",
+    "image" : "https://www.inamu.go.cr/image/journal/article?img_id=981915&t=1533314759779",
+    "message":"El INAMU ofrece servicios de orientación, asesoría en derechos humanos, y servicios de atención a situaciones  de violencia"
+  },
+  {
+    "id": 1,
+    "title": "Información relevante",
+    "image" : "https://www.inamu.go.cr/image/journal/article?img_id=981915&t=1533314759779",
+    "message":"EL INAMU brinda orientación en Derechos Humanos de las Mujeres"
+  },
+  {
+    "id": 2,
+    "title": "Información relevante",
+    "image" : "https://www.inamu.go.cr/image/journal/article?img_id=981915&t=1533314759779",
+    "message":"Los horarios de atención personal del INAMU son Lunes, martes, jueves y viernes de 8:00 a.m. - 3:00 p.m. Miércoles de 1:00 p.m. a 3:00 p.m."
+  },
+  {
+    "id": 3,
+    "title": "Información relevante",
+    "image" : "https://www.inamu.go.cr/image/journal/article?img_id=981915&t=1533314759779",
+    "message":"Los horarios de atención telefónica del INAMU son Lunes, martes, jueves y viernes de 8:00 a.m. a 3:30 p.m. Miércoles de 1:00 p.m. a 3:30 p.m."
+  },
+  {
+    "id": 4,
+    "title": "Enlace",
+    "image" : "https://www.inamu.go.cr/image/journal/article?img_id=981915&t=1533314759779",
+    "message":"Consulta sobre derechos de las mujeres al siguiente enlace: https://www.inamu.go.cr/web/inamu/contactenos-derechos-mujeres"
+  },
+  {
+    "id": 5,
+    "title": "Enlace",
+    "image" : "https://www.inamu.go.cr/image/journal/article?img_id=981915&t=1533314759779",
+    "message":"Consulta sobre violencia contra las mujeres al siguiente enlace: https://www.inamu.go.cr/web/inamu/contactenos-violencia"
+  },
+  {
+    "id": 6,
+    "title": "Enlace",
+    "image" : "https://www.inamu.go.cr/image/journal/article?img_id=981915&t=1533314759779",
+    "message":"Consulta sobre Quejas y sugerencias a la Contraloría de Servicios al siguiente enlace: https://www.inamu.go.cr/web/inamu/contactenos-contraloria-servicios"
+  },
+  {
+    "id": 7,
+    "title": "Enlace",
+    "image" : "https://www.inamu.go.cr/image/journal/article?img_id=981915&t=1533314759779",
+    "message":"Consulta a Recursos Humanos del INAMU al siguiente enlace:https://www.inamu.go.cr/web/inamu/contactenos-informatica"
+  },
+  {
+    "id": 8,
+    "title": "Recordatorio",
+    "image" : "https://www.inamu.go.cr/image/journal/article?img_id=981915&t=1533314759779",
+    "message":"Denuncie Situaciones de Violencia al Servicio de Emergencia 911"
+  },
+  {
+    "id": 9,
+    "title": "Información relevante",
+    "image" : "https://www.inamu.go.cr/image/journal/article?img_id=981915&t=1533314759779",
+    "message":"Central telefónica del INAMU:  Tel.: (506) 2527-8401 Fax: (506) 2283-0657"
+  }
+]

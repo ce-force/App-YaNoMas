@@ -9,6 +9,7 @@ import * as firebase from "firebase";
 import {firebaseConfig} from "./config/FirebaseConfig";
 import TabNavigator from "./src/components/TabNavigator";
 import AccountScreen from "./src/screens/Settings/AccountScreen";
+import InformationScreen from "./src/screens/InformationScreen";
 
 // Initialize firebase app once
 if (!firebase.apps.length) {
@@ -24,7 +25,7 @@ const App = () => {
                 initialRouteName="Login"
                 screenOptions={{headerShown: false}}
             >
-                <Stack.Screen name='Login' component={Login} />
+                <Stack.Screen name='Info' component={InformationScreen} />
                 <Stack.Screen name='Register' component={Register}
                               screenOptions={{headerShown: true}}/>
                 <Stack.Screen name='AccountScreen' component={AccountScreen} />
