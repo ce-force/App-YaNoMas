@@ -11,15 +11,15 @@ import {
   ToastAndroid,
   Alert
 } from "react-native";
-import { Block, Text, theme } from "galio-framework";
+import { Block, Button, Text, theme } from "galio-framework";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import { StackNavigator } from 'react-navigation'; 
 
-
-import Button from "../components/Button";
 import currentTeme from "../constants/Theme";
 import { HeaderHeight, AppVersion, TeamName } from "../constants/utils";
 import Images from "../constants/Images";
-import { TouchableHighlight } from "react-native-gesture-handler";
+
+import AccountScreen from './Settings/AccountScreen';
 
 const { width, height } = Dimensions.get("screen");
 const thumbMeasure = (width - 48 - 32) / 3;
@@ -65,10 +65,42 @@ const UNIVERSALSETTINGSDATA = [
   }
 ]
 
-const showToast = () => {
-  ToastAndroid.show("Se clickeo la entrada", ToastAndroid.SHORT);
+const showToast = (icon) => {
+  ToastAndroid.show(icon, ToastAndroid.SHORT);
 };
 
+const logOut = () => {
+  ToastAndroid.show("Cerrando Sesión...", ToastAndroid.SHORT);
+};
+
+
+function navigate(icon_name){
+  switch (icon_name) {
+    case "bell":
+      showToast("NOTIFICACIONES");
+      break;
+    case "circle-slice-6":
+      showToast("MANEJO DE MI CIRCULO");
+      break;  
+    case "share":
+      showToast("UBICACIÓN");
+      break;
+    case "account":
+      showToast("CUENTA");
+      break;
+    case "key":
+      showToast("PRIVACIDAD Y SEGURIDAD");
+      break;
+    case "information":
+      showToast("SOPORTE");
+      break;
+    case "logout":
+      showToast("CERRAR SESIÓN");
+      break;
+    default:
+      break;
+  }
+}
 
 function Item({ title, icon }) {
   return (
@@ -90,9 +122,9 @@ function Item({ title, icon }) {
           name={icon}
           size={25}
           color={currentTeme.COLORS.DEFAULT}
-          onPress = {() => showToast()}
+          onPress = {() => navigate(icon)}
         />
-        <Text style={styles.title} onPress = {() => showToast()}>{title}</Text>
+        <Text style={styles.title} onPress = {() => navigate(icon)}>{title}</Text>
       </View>
     </View>
     </View>
@@ -158,8 +190,6 @@ function SettingsScreen(){
               </Block>
 
             </Block>
-
-
 
             <Block middle style={{ marginTop: 30, marginBottom: 16 }}>
                 <Block style={styles.divider} />
@@ -279,5 +309,6 @@ const styles = StyleSheet.create({
       paddingLeft: 10
     }
   });
+
 
 export default SettingsScreen;
