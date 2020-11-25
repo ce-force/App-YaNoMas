@@ -13,121 +13,143 @@ import {
 } from "react-native";
 import { Block, Button, Text, theme } from "galio-framework";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import { StackNavigator } from 'react-navigation'; 
+import firebase from "firebase";
+import { NavigationActions, StackActions } from 'react-navigation'
 
 import currentTeme from "../constants/Theme";
 import { HeaderHeight, AppVersion, TeamName } from "../constants/utils";
 import Images from "../constants/Images";
-import { NavigationActions } from 'react-navigation';
+
 import AccountScreen from './Settings/AccountScreen';
 
 
 const { width, height } = Dimensions.get("screen");
 const thumbMeasure = (width - 48 - 32) / 3;
 
-const GENERALSETTINGSDATA = [
-  {
-    id:"yanomas-v1.0.0-settings-notifications",
-    title: "Notificaciones",
-    icon: "bell"
-  },
-  {
-    id:"yanomas-v1.0.0-settings-circlemanagement",
-    title: "Manejo de Círculo",
-    icon: "circle-slice-6"
-  },
-  {
-    id:"yanomas-v1.0.0-settings-locationsharing",
-    title: "Ubicación",
-    icon: "share"
+
+function SettingsScreen({navigation}){
+
+  const GENERALSETTINGSDATA = [
+    {
+      id:"yanomas-v1.0.0-settings-notifications",
+      title: "Notificaciones",
+      icon: "bell"
+    },
+    {
+      id:"yanomas-v1.0.0-settings-circlemanagement",
+      title: "Manejo de Círculo",
+      icon: "circle-slice-6"
+    },
+    {
+      id:"yanomas-v1.0.0-settings-locationsharing",
+      title: "Ubicación",
+      icon: "share"
+    }
+  ]
+
+  const UNIVERSALSETTINGSDATA = [
+    {
+      id:"yanomas-v1.0.0-settings-profile",
+      title: "Cuenta",
+      icon: "account"
+    },
+    {
+      id:"yanomas-v1.0.0-settings-privacy",
+      title: "Privacidad y Seguridad",
+      icon: "key"
+    },
+    {
+      id:"yanomas-v1.0.0-settings-support",
+      title: "Soporte",
+      icon: "information"
+    },
+    {
+      id:"yanomas-v1.0.0-settings-logout",
+      title: "Cerrar Sesión",
+      icon: "logout"
+    }
+  ]
+
+  function Item({ title, icon }) {
+    return (
+        <View style={styles.item}>
+          <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between"
+              }}
+          >
+            <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row"
+                }}
+            >
+              <Icon
+                  name={icon}
+                  size={25}
+                  color={currentTeme.COLORS.DEFAULT}
+                  onPress = {() => navigate(icon)}
+              />
+              <Text style={styles.title} onPress = {() => navigate(icon)}>{title}</Text>
+            </View>
+          </View>
+        </View>
+    );
   }
-]
 
-const UNIVERSALSETTINGSDATA = [
-  {
-    id:"yanomas-v1.0.0-settings-profile",
-    title: "Cuenta",
-    icon: "account"
-  },
-  {
-    id:"yanomas-v1.0.0-settings-privacy",
-    title: "Privacidad y Seguridad",
-    icon: "key"
-  },
-  {
-    id:"yanomas-v1.0.0-settings-support",
-    title: "Soporte",
-    icon: "information"
-  },
-  {
-    id:"yanomas-v1.0.0-settings-logout",
-    title: "Cerrar Sesión",
-    icon: "logout"
+
+  const showToast = (icon) => {
+    ToastAndroid.show(icon, ToastAndroid.SHORT);
+  };
+
+  const goToAccount = () => {
+    navigation.navigate("AccountScreen");
+  };
+
+  const logOut = () => {
+    firebase.auth().signOut().then(() => {
+      ToastAndroid.show("Cerrando Sesión...", ToastAndroid.SHORT);
+
+      NavigationActions.navigate({
+        routeName: 'Login',
+        params: {},
+      });
+    }, (error) => { Alert.alert(error.message); });
+  };
+
+
+  const navigate = (icon_name) => {
+    switch (icon_name) {
+      case "bell":
+        showToast("NOTIFICACIONES");
+        break;
+      case "circle-slice-6":
+        showToast("MANEJO DE MI CIRCULO");
+        break;
+      case "share":
+        showToast("UBICACIÓN");
+        break;
+      case "account":
+        goToAccount();
+        break;
+      case "key":
+        showToast("PRIVACIDAD Y SEGURIDAD");
+        break;
+      case "information":
+        showToast("SOPORTE");
+        break;
+      case "logout":
+        logOut();
+        break;
+      default:
+        break;
+    }
   }
-]
 
-const showToast = (icon) => {
-  ToastAndroid.show(icon, ToastAndroid.SHORT);
-};
 
-function navigate(icon_name){
-  switch (icon_name) {
-    case "bell":
-      showToast("NOTIFICACIONES");
-      break;
-    case "circle-slice-6":
-      showToast("MANEJO DE MI CIRCULO");
-      break;  
-    case "share":
-      showToast("UBICACIÓN");
-      break;
-    case "account":
-      showToast("CUENTA");
-      break;
-    case "key":
-      showToast("PRIVACIDAD Y SEGURIDAD");
-      break;
-    case "information":
-      showToast("SOPORTE");
-      break;
-    case "logout":
-      showToast("CERRAR SESIÓN");
-      break;
-    default:
-      break;
-  }
-}
 
-function Item({ title, icon }) {
-  return (
-    <View style={styles.item}>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-between"
-        }}
-      >
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row"
-          }}
-        >
-        <Icon
-          name={icon}
-          size={25}
-          color={currentTeme.COLORS.DEFAULT}
-          onPress = {() => navigate(icon)}
-        />
-        <Text style={styles.title} onPress = {() => navigate(icon)}>{title}</Text>
-      </View>
-    </View>
-    </View>
-  );
-}
-
-function SettingsScreen(){
   return (
     <Block flex style={styles.profile}>
     <Block flex>
@@ -228,8 +250,8 @@ function SettingsScreen(){
                     {TeamName} - Versión {AppVersion}
                   </Text>
             </Block>
-            
-                        
+
+
           </Block>
         </ScrollView>
       </ImageBackground>
@@ -278,7 +300,6 @@ const styles = StyleSheet.create({
     avatarContainer: {
       marginTop: 10,
       position: "relative",
-      marginTop: -80
     },
     avatar: {
       marginTop: 15,

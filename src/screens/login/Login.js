@@ -17,6 +17,8 @@ import firebase from 'firebase';
 
 import theme from '../../constants/Theme'
 import {LargeButton} from "../../components/LargeButton";
+import TabNavigator from "../../components/TabNavigator";
+import {createAppContainer} from "react-navigation";
 
 
 const Login = ({navigation}) => {
@@ -35,7 +37,7 @@ const Login = ({navigation}) => {
     const verifyLoggedIn = () => {
         firebase.auth().onAuthStateChanged(user => {
             if (user){
-                navigation.navigate('Home');
+                navigation.navigate('TabNavigator');
             }else{
                 navigation.navigate('Login');
             }
@@ -115,7 +117,7 @@ const Login = ({navigation}) => {
                     email: '',
                     password: ''
                 });
-                navigation.navigate('Home');
+                navigation.navigate('TabNavigator');
                 }, (error) => { Alert.alert(error.message); });
     };
 
