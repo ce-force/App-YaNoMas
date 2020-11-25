@@ -5,7 +5,8 @@ import HomeScreen from "../screens/HomeScreen";
 import Theme from "../constants/Theme";
 import SettingsScreen from "../screens/SettingsScreen";
 import CrimesScreen from "../screens/CrimesScreen";
-import CircleScreen from "../screens/CircleSceen";
+import CircleScreen from "../screens/CircleScreen";
+import InformationScreen from "../screens/InformationScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,11 +26,14 @@ const TabNavigator = () => {
                             ? 'home'
                             : 'home';
                     }
+                    else if (route.name === 'Crimes') {
+                        iconName = focused ? 'fire' : 'fire';
+                    }
                     else if (route.name === 'Circle') {
                         iconName = focused ? 'circle' : 'circle-outline';
                     }
-                    else if (route.name === 'Crimes') {
-                        iconName = focused ? 'fire' : 'fire';
+                    else if (route.name === 'Information') {
+                        iconName = focused ? 'information-variant' : 'information-variant';
                     }
                     else if (route.name === 'Settings') {
                         iconName = focused ? 'settings' : 'settings';
@@ -40,13 +44,14 @@ const TabNavigator = () => {
                 },
             })}
             tabBarOptions={{
-                activeTintColor: 'tomato',
+                activeTintColor: Theme.COLORS.DEFAULT,
                 inactiveTintColor: 'gray',
             }}
         >
             <Tab.Screen name="Home" component={HomeScreen} />
-            <Tab.Screen name="Circle" component={CircleScreen} />
             <Tab.Screen name="Crimes" component={CrimesScreen} />
+            <Tab.Screen name="Circle" component={CircleScreen} />
+            <Tab.Screen name="Information" component={InformationScreen} />
             <Tab.Screen name="Settings" component={SettingsScreen} />
         </Tab.Navigator>
     );

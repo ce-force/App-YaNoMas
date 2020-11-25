@@ -20,6 +20,8 @@ import currentTeme from "../constants/Theme";
 import { HeaderHeight, AppVersion, TeamName } from "../constants/utils";
 import Images from "../constants/Images";
 
+import AccountScreen from './Settings/AccountScreen';
+
 
 const { width, height } = Dimensions.get("screen");
 const thumbMeasure = (width - 48 - 32) / 3;
@@ -206,6 +208,7 @@ function SettingsScreen({navigation}){
               </Block>
 
             </Block>
+
 
             <Block middle style={{ marginTop: 30, marginBottom: 16 }}>
                 <Block style={styles.divider} />
