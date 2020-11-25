@@ -4,7 +4,7 @@
     "slug": "YaNoMas",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/imgs/yanomas-icon.png",
+    "icon": "./assets/imgs/yanomas-iconv1.png",
     "splash": {
       "image": "./assets/imgs/yanomas-splash.png",
       "resizeMode": "contain",
@@ -21,12 +21,12 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/imgs/yanomas-icon.png",
+        "foregroundImage": "./assets/imgs/yanomas-iconv1.png",
         "backgroundColor": "#FFFFFF"
       }
     },
     "web": {
-      "favicon": "./assets/imgs/yanomas-icon.png"
+      "favicon": "./assets/imgs/yanomas-iconv1.png"
     },
     "description": "YaNoMas es una herramienta tecnológica que consiste en una aplicación móvil que se basa en la solidaridad entre mujeres para generar una red que permita visibilizar y prevenir delitos."
   }

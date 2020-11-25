@@ -1,24 +1,50 @@
-import React, { useEffect } from 'react';
-import {
-  NavigationContainer,
-} from '@react-navigation/native';
+import React from "react";
+import { createAppContainer } from "react-navigation";
+import { createBottomTabNavigator } from "react-navigation-tabs";
+import Icon from "@expo/vector-icons/MaterialCommunityIcons";
+import HomeScreen from "./src/screens/HomeScreen";
+import Theme from "./src/constants/Theme";
+import SettingsScreen from "./src/screens/SettingsScreen";
+import CrimesScreen from "./src/screens/CrimesScreen";
+import CircleScreen from "./src/screens/CircleSceen";
+import Login from "./src/screens/login/Login";
 
-import {RootStack} from './navigation/Sreens'
-import * as firebase from "firebase";
-import {firebaseConfig} from "./config/FirebaseConfig";
 
-// Initialize firebase app once
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
+const TabNavigator = createBottomTabNavigator(
+  {
+    Home: HomeScreen,
+    Circle: CircleScreen,
+    Crimes: CrimesScreen,
+    Settings: SettingsScreen
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ tintColor }) => {
+        const { routeName } = navigation.state;
+        let iconName = "home";
+        switch (routeName) {
+          case "Home":
+            iconName = "home";
+            break;
+          case "Circle":
+            iconName = "circle";
+            break;
+          case "Crimes":
+            iconName = "fire";
+            break;
+          case "Settings":
+            iconName = "settings";
+            break;
+        }
 
-const App = () => {
+        return <Icon name={iconName} size={25} color={tintColor} />;
+      }
+    }),
+    tabBarOptions: {
+      activeTintColor: Theme.COLORS.DEFAULT,
+      inactiveTintColor: Theme.COLORS.GRAY
+    }
+  }
+);
 
-  return (
-      <NavigationContainer>
-        <RootStack/>
-      </NavigationContainer>
-  );
-};
-
-export default App;
+export default createAppContainer(TabNavigator);

@@ -35,7 +35,7 @@ const Login = ({navigation}) => {
     const verifyLoggedIn = () => {
         firebase.auth().onAuthStateChanged(user => {
             if (user){
-                navigation.navigate('Profile');
+                navigation.navigate('Home');
             }else{
                 navigation.navigate('Login');
             }
@@ -115,7 +115,7 @@ const Login = ({navigation}) => {
                     email: '',
                     password: ''
                 });
-                navigation.navigate('Profile');
+                navigation.navigate('Home');
                 }, (error) => { Alert.alert(error.message); });
     };
 
@@ -236,8 +236,6 @@ const Login = ({navigation}) => {
     );
 };
 
-export default Login;
-
 // Stylesheet
 const styles = StyleSheet.create({
     container: {
@@ -292,3 +290,5 @@ const styles = StyleSheet.create({
         fontSize: 14,
     }
 });
+
+export default Login;
