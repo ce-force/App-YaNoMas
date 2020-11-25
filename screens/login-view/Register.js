@@ -2,9 +2,7 @@ import React from 'react';
 import {
     View,
     Text,
-    Button,
     TouchableOpacity,
-    Dimensions,
     TextInput,
     Platform,
     StyleSheet,
@@ -23,12 +21,12 @@ const Register = ({navigation}) => {
     const [data, setData] = React.useState({
         email: '',
         password: '',
-        confirm_password: '',
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
     });
 
+    // Handle email input change
     const textInputChange = (val) => {
         if( val.length !== 0 ) {
             setData({
@@ -45,6 +43,7 @@ const Register = ({navigation}) => {
         }
     };
 
+    // Handle password input change
     const handlePasswordChange = (val) => {
         setData({
             ...data,
@@ -52,30 +51,22 @@ const Register = ({navigation}) => {
         });
     };
 
-    const handleConfirmPasswordChange = (val) => {
-        setData({
-            ...data,
-            confirm_password: val
-        });
-    }
 
+    // Entry is valid
     const updateSecureTextEntry = () => {
         setData({
             ...data,
             secureTextEntry: !data.secureTextEntry
         });
-    }
+    };
 
-    const updateConfirmSecureTextEntry = () => {
-        setData({
-            ...data,
-            confirm_secureTextEntry: !data.confirm_secureTextEntry
-        });
-    }
-
+    // Sign in user with firebase auth
     function signInHandle(email, password) {
         firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => { }, (error) => { Alert.alert(error.message); });
+            .then(() => {
+                Alert.alert('Listo!', 'Su cuenta ha sido creada', [
+                    {text: 'Okay'}])
+            }, (error) => { Alert.alert(error.message); });
     }
 
     return (

@@ -16,7 +16,6 @@ import Feather from 'react-native-vector-icons/Feather';
 import firebase from 'firebase';
 
 import theme from '../../constants/Theme'
-import Users from '../../model/users';
 import {LargeButton} from "../../components/LargeButton";
 
 
@@ -34,7 +33,7 @@ const Login = ({navigation}) => {
 
     // If the user is already logged in, send him to profile screen
     const verifyLoggedIn = () => {
-        firebase.auth.onAuthStateChanged(user => {
+        firebase.auth().onAuthStateChanged(user => {
             if (user){
                 navigation.navigate('Profile');
             }else{
@@ -43,6 +42,9 @@ const Login = ({navigation}) => {
         })
     };
 
+    verifyLoggedIn();
+
+    // Handle email input changes
     const textInputChange = (val) => {
         if( val.trim().length >= 4 ) {
             setData({
@@ -61,6 +63,7 @@ const Login = ({navigation}) => {
         }
     };
 
+    // Handle password input changes
     const handlePasswordChange = (val) => {
         if( val.trim().length >= 8 ) {
             setData({
@@ -77,6 +80,7 @@ const Login = ({navigation}) => {
         }
     };
 
+    // Entry is valid
     const updateSecureTextEntry = () => {
         setData({
             ...data,
@@ -84,6 +88,7 @@ const Login = ({navigation}) => {
         });
     };
 
+    // User is valid and longer than 4 characters
     const handleValidUser = (val) => {
         if( val.trim().length >= 4 ) {
             setData({
@@ -98,21 +103,22 @@ const Login = ({navigation}) => {
         }
     };
 
-    function signIn(foundUser) {
-        Alert.alert('Listo!', 'Bienvenid@.', [
-            {text: 'Okay'}
-        ]);
-    }
-
+    // User login with firebase authentication
     const loginHandle = (email, password) => {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(() => {
                 Alert.alert('Listo!', 'Bienvenid@.', [
                 {text: 'Okay'}
             ]);
+                setData({
+                    ...data,
+                    email: '',
+                    password: ''
+                });
                 navigation.navigate('Profile');
                 }, (error) => { Alert.alert(error.message); });
     };
+
 
     return (
         <View style={styles.container}>
@@ -232,6 +238,7 @@ const Login = ({navigation}) => {
 
 export default Login;
 
+// Stylesheet
 const styles = StyleSheet.create({
     container: {
         flex: 1,

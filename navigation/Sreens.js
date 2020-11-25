@@ -1,7 +1,7 @@
 import React from "react";
 import { Easing, Animated, Dimensions } from "react-native";
 
-import { createStackNavigator } from "@react-navigation/stack";
+import {createStackNavigator, HeaderBackButton} from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
@@ -139,15 +139,12 @@ function ElementsStack(props) {
     );
   }
 
-  const RootStack = ({navigation}) => {
+  export const RootStack = ({navigation}) => {
       return (
-          <Stack.Navigator mode="card" headerMode="screen">
+          <Stack.Navigator mode="card">
               <Stack.Screen name='Login' component={Login} />
               <Stack.Screen name='Register' component={Register} />
               <Stack.Screen name='Profile' component={Profile} />
           </Stack.Navigator>
       );
-  }
-
-
-export default RootStack;
+  };
