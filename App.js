@@ -8,7 +8,11 @@ import {
 import * as firebase from "firebase";
 import {firebaseConfig} from "./config/FirebaseConfig";
 import TabNavigator from "./src/components/TabNavigator";
-import AccountScreen from "./src/screens/Settings/AccountScreen";
+import AccountScreen from "./src/screens/Settings/AccountSettings";
+import NotificationsSettings from "./src/screens/Settings/NotificationsSettings";
+import CircleManagement from "./src/screens/Settings/CircleManagement";
+import LocationSettings from "./src/screens/Settings/LocationSettings";
+import currentTheme from "./src/constants/Theme";
 
 // Initialize firebase app once
 if (!firebase.apps.length) {
@@ -25,9 +29,12 @@ const App = () => {
                 screenOptions={{headerShown: false}}
             >
                 <Stack.Screen name='Login' component={Login} />
-                <Stack.Screen name='Register' component={Register}
-                              screenOptions={{headerShown: true}}/>
-                <Stack.Screen name='AccountScreen' component={AccountScreen} />
+                <Stack.Screen name='Register' component={Register} screenOptions={{headerShown: true}}/>
+                <Stack.Screen name='NotificationsSettings' component={NotificationsSettings} options={{headerShown:true}} />
+                <Stack.Screen name='CircleManagement' component={CircleManagement} options={{headerShown:true}} />
+                <Stack.Screen name='LocationSettings' component={LocationSettings} options={{headerShown:true}} />
+                <Stack.Screen name='PrivacySetings' component={LocationSettings} options={{headerShown:true}} />        
+                <Stack.Screen name='AccountScreen' component={AccountScreen} options={{headerShown:true, headerTitle:'Confguración de la Cuenta', headerTintColor: currentTheme.COLORS.DEFAULT}} />
                 <Stack.Screen name='TabNavigator' component={TabNavigator} />
             </Stack.Navigator>
         </NavigationContainer>
