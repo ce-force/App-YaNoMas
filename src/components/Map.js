@@ -15,7 +15,6 @@ const Map = (props) => {
           pinColor="purple"
           draggable
           title="Ubicación actual"
-          description="Ubicación actual"
           coordinate={props.location}
           onDragEnd={(event) =>
             props.changeLocation(event.nativeEvent.coordinate)
@@ -23,6 +22,7 @@ const Map = (props) => {
         >
           <FontAwesome name="map-marker" size={60} color="purple" />
         </Marker>
+        {props.children}
       </MapView>
     </View>
   );

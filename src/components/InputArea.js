@@ -1,8 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, View, Dimensions, TextInput } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { FontAwesome } from "@expo/vector-icons";
 
-const InputView = (props) => {
+import IconButton from "../components/IconButton";
+
+const InputArea = (props) => {
   return (
     <View style={styles.container}>
       <Text>
@@ -24,6 +27,9 @@ const InputView = (props) => {
         placeholder="Descripción (opcional)"
         style={styles.input}
       ></TextInput>
+      <IconButton clicked={props.finished}>
+        <FontAwesome name="check" size={24} color="white" />
+      </IconButton>
     </View>
   );
 };
@@ -45,4 +51,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InputView;
+export default InputArea;
