@@ -8,6 +8,7 @@ import {
 import * as firebase from "firebase";
 import {firebaseConfig} from "./config/FirebaseConfig";
 import TabNavigator from "./src/components/TabNavigator";
+import AccountScreen from "./src/screens/Settings/AccountScreen";
 
 // Initialize firebase app once
 if (!firebase.apps.length) {
@@ -19,9 +20,14 @@ const Stack = createStackNavigator();
 const App = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator mode="card">
+            <Stack.Navigator mode="card"
+                initialRouteName="Login"
+                screenOptions={{headerShown: false}}
+            >
                 <Stack.Screen name='Login' component={Login} />
-                <Stack.Screen name='Register' component={Register} />
+                <Stack.Screen name='Register' component={Register}
+                              screenOptions={{headerShown: true}}/>
+                <Stack.Screen name='AccountScreen' component={AccountScreen} />
                 <Stack.Screen name='TabNavigator' component={TabNavigator} />
             </Stack.Navigator>
         </NavigationContainer>
