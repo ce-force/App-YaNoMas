@@ -22,8 +22,8 @@ const EMAIL = "reds@gmail.com";
 
 export default function CircleScreen() {
   const [newPerson, setNewPerson] = useState("");
-  const [persons, setPersons] = useState(PERSONS);
-  const [requests, setRequests] = useState(REQUESTS);
+  const [persons, setPersons] = useState([]);
+  const [requests, setRequests] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
 
   const addPerson = () => {

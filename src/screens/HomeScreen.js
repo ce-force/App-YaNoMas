@@ -26,9 +26,6 @@ function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text>Home Screen</Text>
-      <Picker>
-        <Picker.Item label="Seleccione un delito" />
-      </Picker>
     </View>
   );
 }
@@ -37,7 +34,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "white",
-    alignItems: "flex-end",
+    alignItems: "center",
     justifyContent: "center",
   },
 });
