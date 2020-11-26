@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import MapView, { Marker } from "react-native-maps";
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
 const Map = (props) => {
@@ -9,6 +9,12 @@ const Map = (props) => {
       <MapView
         ref={props.mapRef}
         onPress={(event) => props.changeLocation(event.nativeEvent.coordinate)}
+        initialRegion={{
+          latitude: 9.943829,
+          longitude: -84.118839,
+          latitudeDelta: 1.5,
+          longitudeDelta: 1.5,
+        }}
         style={styles.mapStyle}
       >
         <Marker
@@ -20,7 +26,11 @@ const Map = (props) => {
             props.changeLocation(event.nativeEvent.coordinate)
           }
         >
-          <FontAwesome name="map-marker" size={60} color="purple" />
+          {props.reporting ? (
+            <FontAwesome name="warning" size={30} color="purple" />
+          ) : (
+            <FontAwesome name="map-marker" size={60} color="purple" />
+          )}
         </Marker>
         {props.children}
       </MapView>

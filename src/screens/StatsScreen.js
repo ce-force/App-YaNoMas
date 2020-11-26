@@ -5,11 +5,13 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  Text,
 } from "react-native";
 import { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
 import { baseURL } from "../constants/utils";
 
 import Title from "../components/Title";
@@ -17,6 +19,7 @@ import Map from "../components/Map";
 import InfoArea from "../components/InfoArea";
 import IconButton from "../components/IconButton";
 import InputArea from "../components/InputArea";
+import Card from "../components/Card";
 
 const ALERTS = [
   {
@@ -48,43 +51,23 @@ const ALERTS = [
   },
 ];
 
-const CRIMES = [
-  {
-    label: "Actividad sospechosa",
-    value: "Actividad sospechosa",
-  },
-  {
-    label: "Violación",
-    value: "Violación",
-  },
-  {
-    label: "Asalto",
-    value: "Asalto",
-  },
-  {
-    label: "Acoso",
-    value: "Acoso",
-  },
-];
-
-const CrimesScreen = () => {
+const StatsScreen = () => {
   const [loadingGPS, setLoadingGPS] = useState(false);
-  const [reporting, setReporting] = useState(false);
 
   let map = useRef(null);
   const [crime, setCrime] = useState(null);
   const [alerts, setAlerts] = useState(null);
+  const [geoInfo, setGeoInfo] = useState({ region: null, subregion: null });
 
   const [location, setLocation] = useState({
     latitude: 9.868443,
     longitude: -83.927797,
   });
-  let [category, setCategory] = useState("");
-  let [description, setDescription] = useState("");
 
   const updateLocation = async () => {
     setLoadingGPS(true);
     let { status } = await Location.requestPermissionsAsync();
+    console.log(status);
     if (status !== "granted") {
       Alert.alert("No se puede acceder al GPS");
       setLoadingGPS(false);
@@ -110,9 +93,13 @@ const CrimesScreen = () => {
     );
   };
 
-  const moveObserver = (location) => {
+  const moveObserver = async (location) => {
     setLocation(location);
+    moveCameraTo(location);
     setCrime(null);
+    const result = await Location.reverseGeocodeAsync(location);
+    setGeoInfo(result[0]);
+    console.log(geoInfo);
   };
 
   const getCrimesFromApi = async () => {
@@ -125,35 +112,9 @@ const CrimesScreen = () => {
     }
   };
 
-  const sendReport = () => {
-    if (!category) {
-      Alert.alert("Debe al menos seleccionar una categoría");
-      return;
-    }
-
-    fetch(baseURL + "/alerts", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        category: category,
-        description: description,
-        coords: location,
-        hourDate: new Date().toISOString(),
-      }),
-    });
-
-    Alert.alert("¡Muchas gracias por su colaboración!");
-    setDescription("");
-    setCrime("");
-    setReporting(false);
-  };
-
   let alertMarkers = null;
 
-  if (!reporting && alerts) {
+  if (alerts) {
     alertMarkers = alerts.map((el, i) => (
       <Marker
         key={i}
@@ -168,27 +129,22 @@ const CrimesScreen = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Title>Eventos cercanos</Title>
+      <Title>Estadísticas</Title>
       <ScrollView style={styles.container}>
-        {reporting ? null : (
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            <IconButton clicked={getCrimesFromApi}>
-              <FontAwesome name="refresh" size={30} color="white" />
-            </IconButton>
-            <IconButton clicked={() => setReporting(true)}>
-              <FontAwesome name="bullhorn" size={30} color="white" />
-            </IconButton>
-          </View>
-        )}
-        <Map
-          changeLocation={moveObserver}
-          location={location}
-          mapRef={map}
-          reporting={reporting}
-        >
+        <Picker>
+          <Picker.Item label="Último día" />
+          <Picker.Item label="Última semana" />
+          <Picker.Item label="Último mes" />
+        </Picker>
+        <View style={styles.buttonContainer}>
+          <IconButton clicked={getCrimesFromApi}>
+            <FontAwesome name="refresh" size={30} color="white" />
+          </IconButton>
+        </View>
+        <Map changeLocation={moveObserver} location={location} mapRef={map}>
           {alertMarkers}
         </Map>
-        <View style={{ flex: 1, flexDirection: "row" }}>
+        <View style={styles.buttonContainer}>
           <IconButton disabled={loadingGPS} clicked={updateLocation}>
             {loadingGPS ? (
               <ActivityIndicator color="white"></ActivityIndicator>
@@ -196,24 +152,16 @@ const CrimesScreen = () => {
               <MaterialIcons name="gps-fixed" size={24} color="white" />
             )}
           </IconButton>
-          <IconButton clicked={() => moveCameraTo(location)}>
+          <IconButton clicked={() => moveObserver(location)}>
             <FontAwesome name="map-marker" size={24} color="white" />
           </IconButton>
         </View>
-        {reporting ? (
-          <InputArea
-            options={CRIMES}
-            selected={category}
-            description={description}
-            handleChangeValue={(val) => {
-              if (val) {
-                setCategory(val);
-              }
-            }}
-            handleChangeDescription={setDescription}
-            location={location}
-            finished={sendReport}
-          ></InputArea>
+        {!crime ? (
+          <Card>
+            <Text>
+              Referencia: {geoInfo.region}, {geoInfo.subregion}
+            </Text>
+          </Card>
         ) : (
           <InfoArea crime={crime}></InfoArea>
         )}
@@ -226,6 +174,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  buttonContainer: { flex: 1, flexDirection: "row" },
 });
 
-export default CrimesScreen;
+export default StatsScreen;
