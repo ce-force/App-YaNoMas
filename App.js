@@ -23,11 +23,16 @@ if (!firebase.apps.length) {
 
 
 const App = () => {
+    const [loggedIn, setLoggedIn] = React.useState({
+        isLoggedIn: false
+    });
+
+
   return (
     <NavigationContainer>
       <Stack.Navigator
         mode="card"
-        initialRouteName="TabNavigator"
+        initialRouteName="Login"
         screenOptions={{ headerShown: false }}
       >
         <Stack.Screen name="Login" component={Login} />

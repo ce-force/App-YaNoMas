@@ -44,11 +44,13 @@ const Login = ({navigation}) => {
                 navigation.navigate('TabNavigator');
             }else{
                 navigation.navigate('Login');
+                console.log("nada");
             }
         })
     };
 
     verifyLoggedIn();
+
 
     // Handle email input changes
     const textInputChange = (val) => {
