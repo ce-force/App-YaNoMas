@@ -5,6 +5,7 @@ import { FontAwesome } from "@expo/vector-icons";
 
 import IconButton from "../components/IconButton";
 import Card from "../components/Card";
+import Input from "./Input";
 
 const InputArea = (props) => {
   return (
@@ -22,12 +23,11 @@ const InputArea = (props) => {
           <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
         ))}
       </Picker>
-      <TextInput
+      <Input
         value={props.description}
         onChangeText={props.handleChangeDescription}
         placeholder="Descripción (opcional)"
-        style={styles.input}
-      ></TextInput>
+      ></Input>
       <IconButton clicked={props.finished}>
         <FontAwesome name="check" size={24} color="white" />
       </IconButton>
@@ -35,13 +35,6 @@ const InputArea = (props) => {
   );
 };
 
-const styles = StyleSheet.create({
-  input: {
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    padding: 12,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default InputArea;

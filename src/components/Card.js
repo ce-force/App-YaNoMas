@@ -5,11 +5,10 @@ const Card = (props) => <View style={styles.container}>{props.children}</View>;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     borderRadius: 8,
-    margin: 4,
+    margin: 8,
     elevation: 1,
-    padding: 12,
+    padding: 8,
   },
 });
 
