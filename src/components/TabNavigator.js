@@ -5,7 +5,7 @@ import HomeScreen from "../screens/HomeScreen";
 import Theme from "../constants/Theme";
 import SettingsScreen from "../screens/SettingsScreen";
 import CrimesScreen from "../screens/CrimesScreen";
-import CircleScreen from "../screens/CircleScreen";
+import CircleScreen from "../screens/CircleScreen2";
 import InformationScreen from "../screens/InformationScreen";
 import StatsScreen from "../screens/StatsScreen";
 

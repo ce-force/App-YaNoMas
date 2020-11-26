@@ -16,6 +16,7 @@ const IconButton = (props) => (
     onPress={props.clicked}
   >
     {props.children}
+    <Text style={{ color: "white" }}>{props.title}</Text>
   </TouchableOpacity>
 );
 
