@@ -19,9 +19,6 @@ import { NavigationActions, StackActions } from "react-navigation";
 import currentTeme from "../constants/Theme";
 import { HeaderHeight, AppVersion, TeamName } from "../constants/utils";
 import Images from "../constants/Images";
-
-import AccountScreen from "./Settings/AccountScreen";
-
 const { width, height } = Dimensions.get("screen");
 const thumbMeasure = (width - 48 - 32) / 3;
 
@@ -102,10 +99,6 @@ function SettingsScreen({ navigation }) {
     ToastAndroid.show(icon, ToastAndroid.SHORT);
   };
 
-  const goToAccount = () => {
-    navigation.navigate("AccountScreen");
-  };
-
   const logOut = () => {
     firebase
       .auth()
@@ -128,22 +121,22 @@ function SettingsScreen({ navigation }) {
   const navigate = (icon_name) => {
     switch (icon_name) {
       case "bell":
-        showToast("NOTIFICACIONES");
+        navigation.navigate("NotificationsSettings");
         break;
       case "circle-slice-6":
-        showToast("MANEJO DE MI CIRCULO");
+        navigation.navigate("CircleManagement");
         break;
       case "share":
-        showToast("UBICACIÓN");
+        navigation.navigate("LocationSettings");
         break;
       case "account":
-        goToAccount();
+        navigation.navigate("AccountScreen");
         break;
       case "key":
-        showToast("PRIVACIDAD Y SEGURIDAD");
+        navigation.navigate("AccountScreen");
         break;
       case "information":
-        showToast("SOPORTE");
+        showToast("PÁGINA DE SOPORTE");
         break;
       case "logout":
         logOut();
