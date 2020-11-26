@@ -23,7 +23,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/imgs/yanomas-iconv1.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "app.yanomas.android_package",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/imgs/yanomas-iconv1.png"

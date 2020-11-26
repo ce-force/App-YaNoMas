@@ -18,7 +18,11 @@ import firebase from 'firebase';
 import theme from '../../constants/Theme'
 import {LargeButton} from "../../components/LargeButton";
 import TabNavigator from "../../components/TabNavigator";
-import {createAppContainer} from "react-navigation";
+
+
+import * as Google from 'expo-google-app-auth'
+import {baseURL} from "../../constants/utils";
+import * as GoogleSignIn from "expo-google-sign-in";
 
 
 const Login = ({navigation}) => {
@@ -108,10 +112,12 @@ const Login = ({navigation}) => {
     // User login with firebase authentication
     const loginHandle = (email, password) => {
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => {
+            .then((r) => {
                 Alert.alert('Listo!', 'Bienvenid@.', [
                 {text: 'Okay'}
             ]);
+                r.user.email;
+                r.user.uid;
                 setData({
                     ...data,
                     email: '',
@@ -121,6 +127,19 @@ const Login = ({navigation}) => {
                 }, (error) => { Alert.alert(error.message); });
     };
 
+    const signInWithGoogleAsync = async () => {
+        try {
+            await GoogleSignIn.askForPlayServicesAsync();
+            const { type, user } = await GoogleSignIn.signInAsync();
+            if (type === 'success') {
+                await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                const credential = firebase.auth.GoogleAuthProvider.credential(user.auth.idToken, user.auth.accessToken,);
+                const googleProfileData = await firebase.auth().signInWithCredential(credential);
+            }
+        } catch ({ message }) {
+            alert('login: Error:' + message);
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -232,6 +251,9 @@ const Login = ({navigation}) => {
                     <LargeButton
                         onPress={() => {loginHandle( data.email, data.password )}}
                         title="Ingresar"/>
+                    <LargeButton
+                        onPress={() => {signInWithGoogleAsync()}}
+                        title="Google"/>
                 </View>
             </Animatable.View>
         </View>
