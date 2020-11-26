@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, Button, RefreshControl } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  Button,
+  RefreshControl,
+  Alert,
+} from "react-native";
 
 import Card from "../components/Card";
 import Input from "../components/Input";
@@ -27,7 +34,7 @@ export default function CircleScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   const addPerson = () => {
-    fetch(baseURL + "/addCircle", {
+    fetch(baseURL + "/circle", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -35,12 +42,40 @@ export default function CircleScreen() {
       },
       body: JSON.stringify({ me: EMAIL, friend: newPerson }),
     });
+    setNewPerson("");
+    Alert.alert("¡Solicitud enviada!");
+  };
+
+  const acceptPerson = async (email) => {
+    fetch(baseURL + "/circle/confirm", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ me: EMAIL, friend: email }),
+    });
+    await getRequests();
+    Alert.alert("Solicitud aceptada");
+  };
+
+  const rejectPerson = async (email) => {
+    fetch(baseURL + "/circle/refuse", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ me: EMAIL, friend: email }),
+    });
+    await getRequests();
+    Alert.alert("Solicitud rechazada");
   };
 
   const getRequests = async () => {
     setRefreshing(true);
     const response = await fetch(
-      baseURL + "/requests/" + EMAIL
+      baseURL + "/circle/" + EMAIL
     ).catch((response) => console.log(response));
     let requests = await response.json();
     setRequests(requests);
@@ -67,8 +102,14 @@ export default function CircleScreen() {
             <Text> Nombre: {el.name}</Text>
             <Text> Correo: {el.email}</Text>
             <View style={{ flex: 1, flexDirection: "row" }}>
-              <IconButton title="Rechazar"></IconButton>
-              <IconButton title="Aceptar"></IconButton>
+              <IconButton
+                title="Rechazar"
+                clicked={() => rejectPerson(el.email)}
+              ></IconButton>
+              <IconButton
+                title="Aceptar"
+                clicked={() => acceptPerson(el.email)}
+              ></IconButton>
             </View>
           </Card>
         ))}
