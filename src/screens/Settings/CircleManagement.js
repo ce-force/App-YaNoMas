@@ -1,10 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { Header } from "react-native/Libraries/NewAppScreen";
 
-function AccountScreen(){
+function CircleManagement(){
     return (
         <View style={styles.container}>
-            <Text>Account Screen</Text>
+
+            <Text>Circle Management</Text>
         </View>
     );
 }
@@ -18,4 +20,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default AccountScreen;
+export default CircleManagement;
