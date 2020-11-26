@@ -18,7 +18,9 @@ import firebase from 'firebase';
 import theme from '../../constants/Theme'
 import {LargeButton} from "../../components/LargeButton";
 import TabNavigator from "../../components/TabNavigator";
-import {createAppContainer} from "react-navigation";
+
+
+import * as Google from 'expo-google-app-auth'
 
 
 const Login = ({navigation}) => {
@@ -108,10 +110,12 @@ const Login = ({navigation}) => {
     // User login with firebase authentication
     const loginHandle = (email, password) => {
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => {
+            .then((r) => {
                 Alert.alert('Listo!', 'Bienvenid@.', [
                 {text: 'Okay'}
             ]);
+                r.user.email;
+                r.user.uid;
                 setData({
                     ...data,
                     email: '',
@@ -121,6 +125,22 @@ const Login = ({navigation}) => {
                 }, (error) => { Alert.alert(error.message); });
     };
 
+    const signInWithGoogleAsync = async () => {
+        try {
+            const result = await Google.logInAsync({
+                androidClientId: '587503203603-m3crnpunnnmoou6ml0nao5ocmncvsara.apps.googleusercontent.com',
+                scopes: ['profile', 'email'],
+            });
+
+            if (result.type === 'success') {
+                return result.accessToken;
+            } else {
+                return {cancelled: true};
+            }
+        } catch (e) {
+            return {error: true};
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -232,6 +252,9 @@ const Login = ({navigation}) => {
                     <LargeButton
                         onPress={() => {loginHandle( data.email, data.password )}}
                         title="Ingresar"/>
+                    <LargeButton
+                        onPress={() => {signInWithGoogleAsync()}}
+                        title="Google"/>
                 </View>
             </Animatable.View>
         </View>

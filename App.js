@@ -25,7 +25,7 @@ const App = () => {
                 initialRouteName="Login"
                 screenOptions={{headerShown: false}}
             >
-                <Stack.Screen name='Info' component={InformationScreen} />
+                <Stack.Screen name='Login' component={Login} />
                 <Stack.Screen name='Register' component={Register}
                               screenOptions={{headerShown: true}}/>
                 <Stack.Screen name='AccountScreen' component={AccountScreen} />
