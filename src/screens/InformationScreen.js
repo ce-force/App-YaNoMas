@@ -5,37 +5,17 @@ import currentTeme from "../constants/Theme";
 
 import { Card } from 'react-native-elements'
 import {Picker} from '@react-native-picker/picker';
+import {MessageItem} from "../components/MessageItem";
 
 const customData = require('../../assets/MessageData.json');
 
 
-function Item({ title, image, message }) {
-  return (
 
-    <View style={{marginBottom: 20}}>
-
-        <Card style={{borderRadius: 8}}>
-            <Card.Title>{title}</Card.Title>
-            <Card.Divider/>
-            <Text style={{marginBottom: 10}}>
-                {message}
-            </Text>
-            <Card.Divider/>
-
-            <Card.Image source={{ uri: image, width: 25, height: 25, }}/>
-
-        </Card>
-
-    </View>
-
-);
-
-}
 
 function InformationScreen(){
 
     const [category, setCategory] = React.useState({
-        type: 'java',
+        type: 'info',
     });
 
     const categories = [
@@ -59,9 +39,9 @@ function InformationScreen(){
                 itemStyle={{ color:'red', fontWeight:'900', fontSize: 18, padding:30}}>
                 {categories.map(item => <Picker.Item key={item.id} label={item.label} value={item.type}/>)}
             </Picker>
-            <ScrollView style={{ marginBottom: 50 }}>
+            <ScrollView style={{ marginBottom: 50, marginTop: 50}}>
             {customData.map(element => { return category.type === element.type ? (
-                                        <Item key={element.id}
+                                        <MessageItem key={element.id}
                                             title={element.title}
                                             image={element.image}
                                             message={element.message}/>)
@@ -76,8 +56,9 @@ function InformationScreen(){
 
 const styles = StyleSheet.create({
     container: {
-      backgroundColor: "white",
-      justifyContent: "center",
+        flex: 1,
+        backgroundColor: "white",
+        justifyContent: "center",
         alignItems: "center"
     },
     item: {
@@ -91,10 +72,10 @@ const styles = StyleSheet.create({
       paddingLeft: 10
     },
     picker: {
-        top: 5,
+        top: 50,
         width: 260,
         fontSize:10,
-        borderRadius: 10
+        borderRadius: 10,
     }
   });
 

@@ -6,6 +6,7 @@ import {
 } from "@react-navigation/stack";
 import Register from "./src/screens/login/Register";
 import { NavigationContainer } from "@react-navigation/native";
+import * as firebase from "firebase";
 import { firebaseConfig } from "./config/FirebaseConfig";
 import TabNavigator from "./src/components/TabNavigator";
 import AccountScreen from "./src/screens/Settings/AccountSettings";
@@ -15,6 +16,11 @@ import LocationSettings from "./src/screens/Settings/LocationSettings";
 import currentTheme from "./src/constants/Theme";
 
 const Stack = createStackNavigator();
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
 
 const App = () => {
   return (

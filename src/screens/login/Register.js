@@ -105,7 +105,7 @@ const Register = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor={theme.COLORS.SECONDARY} barStyle="light-content"/>
+            <StatusBar backgroundColor={theme.COLORS.DEFAULT} barStyle="light-content"/>
             <View style={styles.header}>
                 <Text style={styles.text_header}>¡Ingresar ahora!</Text>
             </View>
@@ -113,7 +113,7 @@ const Register = ({navigation}) => {
                 animation="fadeInUpBig"
                 style={styles.footer}
             >
-                <ScrollView style={{ width: 160, fontSize:10 }}>
+                <ScrollView>
                     <Text style={styles.text_footer}>Nombre completo</Text>
                     <View style={styles.action}>
                         <FontAwesome
@@ -215,7 +215,7 @@ const Register = ({navigation}) => {
                         <TouchableOpacity
                             style={styles.signIn}
                             onPress={() => navigation.goBack()}
-                        ><Text style={{color: theme.COLORS.SECONDARY, marginTop:15}}>Ya tengo una cuenta</Text>
+                        ><Text style={{color: theme.COLORS.DEFAULT, marginTop:15}}>Ya tengo una cuenta</Text>
                         </TouchableOpacity>
 
                         <LargeButton
@@ -233,7 +233,7 @@ export default Register;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.COLORS.SECONDARY
+        backgroundColor: theme.COLORS.DEFAULT
     },
     header: {
         flex: 1,
