@@ -113,7 +113,7 @@ const Register = ({navigation}) => {
                 animation="fadeInUpBig"
                 style={styles.footer}
             >
-                <ScrollView>
+                <ScrollView style={{ width: 160, fontSize:10 }}>
                     <Text style={styles.text_footer}>Nombre completo</Text>
                     <View style={styles.action}>
                         <FontAwesome

@@ -21,6 +21,8 @@ import TabNavigator from "../../components/TabNavigator";
 
 
 import * as Google from 'expo-google-app-auth'
+import {baseURL} from "../../constants/utils";
+import * as GoogleSignIn from "expo-google-sign-in";
 
 
 const Login = ({navigation}) => {
@@ -127,18 +129,15 @@ const Login = ({navigation}) => {
 
     const signInWithGoogleAsync = async () => {
         try {
-            const result = await Google.logInAsync({
-                androidClientId: '587503203603-m3crnpunnnmoou6ml0nao5ocmncvsara.apps.googleusercontent.com',
-                scopes: ['profile', 'email'],
-            });
-
-            if (result.type === 'success') {
-                return result.accessToken;
-            } else {
-                return {cancelled: true};
+            await GoogleSignIn.askForPlayServicesAsync();
+            const { type, user } = await GoogleSignIn.signInAsync();
+            if (type === 'success') {
+                await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                const credential = firebase.auth.GoogleAuthProvider.credential(user.auth.idToken, user.auth.accessToken,);
+                const googleProfileData = await firebase.auth().signInWithCredential(credential);
             }
-        } catch (e) {
-            return {error: true};
+        } catch ({ message }) {
+            alert('login: Error:' + message);
         }
     }
 
