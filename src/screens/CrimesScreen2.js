@@ -11,6 +11,8 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { FontAwesome } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 
 import { UserContext } from "../communication/UserContext";
@@ -43,6 +45,7 @@ const CRIMES = [
 export default function CrimeScreen(props) {
   const [getGlobalUser, setGlobalUser] = useContext(UserContext);
   const [loading, setLoading] = useState(false);
+  const [emergency, setEmergency] = useState(false);
 
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -55,6 +58,10 @@ export default function CrimeScreen(props) {
     longitude: -83.927797,
   });
   const [alerts, setAlerts] = useState([]);
+
+  useEffect(() => {
+    getAlerts();
+  }, []);
 
   const changeCategory = (val) => {
     if (val) {
@@ -138,18 +145,44 @@ export default function CrimeScreen(props) {
     setLoading(false);
   };
 
-  let alertMarkers = reporting
-    ? null
-    : alerts.map((el, i) => (
+  let alertMarkers = null;
+  if (!reporting) {
+    alertMarkers = alerts.map((el, i) => {
+      let icon = null;
+      switch (el.category) {
+        case "Actividad sospechosa":
+          icon = <FontAwesome name="warning" size={24} color="black" />;
+          break;
+        case "Violencia":
+          icon = <FontAwesome5 name="fist-raised" size={24} color="black" />;
+          break;
+        case "Acoso":
+          icon = (
+            <MaterialCommunityIcons name="kabaddi" size={24} color="black" />
+          );
+          break;
+        case "Asalto":
+          icon = (
+            <MaterialCommunityIcons name="pistol" size={24} color="black" />
+          );
+          break;
+
+        default:
+          icon = <FontAwesome name="warning" size={24} color="black" />;
+          break;
+      }
+      return (
         <Marker
           key={i}
           coordinate={el.coords}
           title={el.category}
           onPress={() => setCrimeDetails(el)}
         >
-          <FontAwesome name="warning" size={24} color="black" />
+          {icon}
         </Marker>
-      ));
+      );
+    });
+  }
 
   let GPSMarker = GPSLocation ? (
     <Marker coordinate={GPSLocation} title="GPS">
@@ -232,7 +265,7 @@ export default function CrimeScreen(props) {
           <FontAwesome name="ambulance" size={24} color="white" />
         </IconButton>
         <IconButton clicked={getAlerts}>
-          <FontAwesome name="refresh" size={24} color="white" />
+          <FontAwesome name="warning" size={24} color="white" />
         </IconButton>
       </View>
       {detailsView}
