@@ -14,30 +14,68 @@ import NotificationsSettings from "./src/screens/Settings/NotificationsSettings"
 import LocationSettings from "./src/screens/Settings/LocationSettings";
 import currentTheme from "./src/constants/Theme";
 
+import { UserContext, UserProvider } from "./src/communication/UserContext";
+import CircleScreen from "./src/screens/CircleScreen2";
+
 const Stack = createStackNavigator();
 
 if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
 }
 
-
 const App = () => {
-    return (
-        <NavigationContainer>
-            <Stack.Navigator mode="card"
-                initialRouteName="Login"
-                screenOptions={{headerShown: false}}
-            >
-                <Stack.Screen name='Login' component={Login} />
-                <Stack.Screen name='Register' component={Register} screenOptions={{headerShown: true}}/>
-                <Stack.Screen name='NotificationsSettings' component={NotificationsSettings} options={{headerShown:true}} />
-                <Stack.Screen name='LocationSettings' component={LocationSettings} options={{headerShown:true}} />
-                <Stack.Screen name='PrivacySetings' component={LocationSettings} options={{headerShown:true}} />        
-                <Stack.Screen name='AccountScreen' component={AccountScreen} options={{headerShown:true, headerTitle:'Confguración de la Cuenta', headerTintColor: currentTheme.COLORS.DEFAULT}} />
-                <Stack.Screen name='TabNavigator' component={TabNavigator} />
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
+  const [loggedIn, setLoggedIn] = React.useState({
+    isLoggedIn: false,
+  });
+
+  return (
+    <UserProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          mode="card"
+          initialRouteName="Login"
+          screenOptions={{ headerShown: false }}
+        >
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen
+            name="Register"
+            component={Register}
+            screenOptions={{ headerShown: true }}
+          />
+          <Stack.Screen
+            name="NotificationsSettings"
+            component={NotificationsSettings}
+            options={{ headerShown: true }}
+          />
+          <Stack.Screen
+            name="CircleManagement"
+            component={CircleScreen}
+            options={{ headerShown: true }}
+          />
+          <Stack.Screen
+            name="LocationSettings"
+            component={LocationSettings}
+            options={{ headerShown: true }}
+          />
+          <Stack.Screen
+            name="PrivacySetings"
+            component={LocationSettings}
+            options={{ headerShown: true }}
+          />
+          <Stack.Screen
+            name="AccountScreen"
+            component={AccountScreen}
+            options={{
+              headerShown: true,
+              headerTitle: "Confguración de la Cuenta",
+              headerTintColor: currentTheme.COLORS.DEFAULT,
+            }}
+          />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserProvider>
+  );
 };
 
 export default App;
