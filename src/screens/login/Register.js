@@ -16,15 +16,34 @@ import theme from '../../constants/Theme'
 import {LargeButton} from "../../components/LargeButton";
 import firebase from "firebase";
 
+import { baseURL } from "../../constants/utils";
 const Register = ({navigation}) => {
 
     const [data, setData] = React.useState({
         email: '',
         password: '',
+        name: '',
         check_textInputChange: false,
         secureTextEntry: true,
         confirm_secureTextEntry: true,
     });
+
+    // Handle name input change
+    const nameInputChange = (val) => {
+        if( val.length !== 0 ) {
+            setData({
+                ...data,
+                name: val,
+                check_textInputChange: true
+            });
+        } else {
+            setData({
+                ...data,
+                name: val,
+                check_textInputChange: false
+            });
+        }
+    };
 
     // Handle email input change
     const textInputChange = (val) => {
@@ -63,15 +82,30 @@ const Register = ({navigation}) => {
     // Sign in user with firebase auth
     function signInHandle(email, password) {
         firebase.auth().createUserWithEmailAndPassword(email, password)
-            .then(() => {
-                Alert.alert('Listo!', 'Su cuenta ha sido creada', [
-                    {text: 'Okay'}])
+            .then(r => {
+                Alert.alert('Listo', 'Su cuenta ha sido creada', [
+                    {text: 'Okay'}]);
+
+                // Post to MongoDB
+                fetch(baseURL + "/users", {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email: r.user.email,
+                        name: data.name,
+                        uid: r.user.uid
+                    }),
+                });
+                navigation.navigate('Login')
             }, (error) => { Alert.alert(error.message); });
     }
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor={theme.COLORS.SECONDARY} barStyle="light-content"/>
+            <StatusBar backgroundColor={theme.COLORS.DEFAULT} barStyle="light-content"/>
             <View style={styles.header}>
                 <Text style={styles.text_header}>¡Ingresar ahora!</Text>
             </View>
@@ -80,7 +114,34 @@ const Register = ({navigation}) => {
                 style={styles.footer}
             >
                 <ScrollView>
-                    <Text style={styles.text_footer}>Correo electrónico</Text>
+                    <Text style={styles.text_footer}>Nombre completo</Text>
+                    <View style={styles.action}>
+                        <FontAwesome
+                            name="user-o"
+                            color="#05375a"
+                            size={20}
+                        />
+                        <TextInput
+                            placeholder="Nombre completo"
+                            style={styles.textInput}
+                            autoCapitalize="none"
+                            onChangeText={(val) => nameInputChange(val)}
+                        />
+                        {data.check_textInputChange ?
+                            <Animatable.View
+                                animation="bounceIn"
+                            >
+                                <Feather
+                                    name="check-circle"
+                                    color="green"
+                                    size={20}
+                                />
+                            </Animatable.View>
+                            : null}
+                    </View>
+                    <Text style={[styles.text_footer, {
+                        marginTop: 35
+                    }]}>Correo Electrónico</Text>
                     <View style={styles.action}>
                         <FontAwesome
                             name="user-o"
@@ -106,33 +167,6 @@ const Register = ({navigation}) => {
                             : null}
                     </View>
 
-                    <Text style={[styles.text_footer, {
-                        marginTop: 35
-                    }]}>Número de Cédula</Text>
-                    <View style={styles.action}>
-                        <FontAwesome
-                            name="user-o"
-                            color="#05375a"
-                            size={20}
-                        />
-                        <TextInput
-                            placeholder="Número de Cédula"
-                            style={styles.textInput}
-                            autoCapitalize="none"
-                            onChangeText={(val) => textInputChange(val)}
-                        />
-                        {data.check_textInputChange ?
-                            <Animatable.View
-                                animation="bounceIn"
-                            >
-                                <Feather
-                                    name="check-circle"
-                                    color="green"
-                                    size={20}
-                                />
-                            </Animatable.View>
-                            : null}
-                    </View>
 
                     <Text style={[styles.text_footer, {
                         marginTop: 35
@@ -181,7 +215,7 @@ const Register = ({navigation}) => {
                         <TouchableOpacity
                             style={styles.signIn}
                             onPress={() => navigation.goBack()}
-                        ><Text style={{color: theme.COLORS.SECONDARY, marginTop:15}}>Ya tengo una cuenta</Text>
+                        ><Text style={{color: theme.COLORS.DEFAULT, marginTop:15}}>Ya tengo una cuenta</Text>
                         </TouchableOpacity>
 
                         <LargeButton
@@ -199,7 +233,7 @@ export default Register;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.COLORS.SECONDARY
+        backgroundColor: theme.COLORS.DEFAULT
     },
     header: {
         flex: 1,

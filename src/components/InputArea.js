@@ -4,10 +4,12 @@ import { Picker } from "@react-native-picker/picker";
 import { FontAwesome } from "@expo/vector-icons";
 
 import IconButton from "../components/IconButton";
+import Card from "../components/Card";
+import Input from "./Input";
 
 const InputArea = (props) => {
   return (
-    <View style={styles.container}>
+    <Card>
       <Text>
         {props.location.latitude.toFixed(5)},
         {props.location.longitude.toFixed(5)}
@@ -21,34 +23,18 @@ const InputArea = (props) => {
           <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
         ))}
       </Picker>
-      <TextInput
+      <Input
         value={props.description}
         onChangeText={props.handleChangeDescription}
         placeholder="Descripción (opcional)"
-        style={styles.input}
-      ></TextInput>
+      ></Input>
       <IconButton clicked={props.finished}>
         <FontAwesome name="check" size={24} color="white" />
       </IconButton>
-    </View>
+    </Card>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    borderRadius: 8,
-    margin: 4,
-    elevation: 1,
-    padding: 12,
-    flexGrow: 1,
-  },
-  input: {
-    borderRadius: 4,
-    borderWidth: 1,
-    borderColor: "#cccccc",
-    padding: 12,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default InputArea;

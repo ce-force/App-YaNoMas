@@ -1,24 +1,25 @@
 import React from "react";
 import Login from "./src/screens/login/Login";
-import {createStackNavigator, HeaderBackButton} from "@react-navigation/stack";
-import Register from "./src/screens/login/Register";
 import {
-    NavigationContainer,
-} from '@react-navigation/native';
+  createStackNavigator,
+  HeaderBackButton,
+} from "@react-navigation/stack";
+import Register from "./src/screens/login/Register";
+import { NavigationContainer } from "@react-navigation/native";
 import * as firebase from "firebase";
-import {firebaseConfig} from "./config/FirebaseConfig";
+import { firebaseConfig } from "./config/FirebaseConfig";
 import TabNavigator from "./src/components/TabNavigator";
 import AccountScreen from "./src/screens/Settings/AccountSettings";
 import NotificationsSettings from "./src/screens/Settings/NotificationsSettings";
 import LocationSettings from "./src/screens/Settings/LocationSettings";
 import currentTheme from "./src/constants/Theme";
 
-// Initialize firebase app once
+const Stack = createStackNavigator();
+
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
-const Stack = createStackNavigator();
 
 const App = () => {
     return (

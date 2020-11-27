@@ -18,7 +18,11 @@ import firebase from 'firebase';
 import theme from '../../constants/Theme'
 import {LargeButton} from "../../components/LargeButton";
 import TabNavigator from "../../components/TabNavigator";
-import {createAppContainer} from "react-navigation";
+
+
+import * as Google from 'expo-google-app-auth'
+import {baseURL} from "../../constants/utils";
+import * as GoogleSignIn from "expo-google-sign-in";
 
 
 const Login = ({navigation}) => {
@@ -40,11 +44,13 @@ const Login = ({navigation}) => {
                 navigation.navigate('TabNavigator');
             }else{
                 navigation.navigate('Login');
+                console.log("nada");
             }
         })
     };
 
     verifyLoggedIn();
+
 
     // Handle email input changes
     const textInputChange = (val) => {
@@ -108,10 +114,12 @@ const Login = ({navigation}) => {
     // User login with firebase authentication
     const loginHandle = (email, password) => {
         firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => {
+            .then((r) => {
                 Alert.alert('Listo!', 'Bienvenid@.', [
                 {text: 'Okay'}
             ]);
+                r.user.email;
+                r.user.uid;
                 setData({
                     ...data,
                     email: '',
@@ -121,6 +129,19 @@ const Login = ({navigation}) => {
                 }, (error) => { Alert.alert(error.message); });
     };
 
+    const signInWithGoogleAsync = async () => {
+        try {
+            await GoogleSignIn.askForPlayServicesAsync();
+            const { type, user } = await GoogleSignIn.signInAsync();
+            if (type === 'success') {
+                await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                const credential = firebase.auth.GoogleAuthProvider.credential(user.auth.idToken, user.auth.accessToken,);
+                const googleProfileData = await firebase.auth().signInWithCredential(credential);
+            }
+        } catch ({ message }) {
+            alert('login: Error:' + message);
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -141,7 +162,7 @@ const Login = ({navigation}) => {
                 <View style={styles.action}>
                     <FontAwesome
                         name="user-o"
-                        color={theme.COLORS.SECONDARY}
+                        color={theme.COLORS.DEFAULT}
                         size={20}
                     />
                     <TextInput
@@ -180,7 +201,7 @@ const Login = ({navigation}) => {
                 <View style={styles.action}>
                     <Feather
                         name="lock"
-                        color={theme.COLORS.SECONDARY}
+                        color={theme.COLORS.DEFAULT}
                         size={20}
                     />
                     <TextInput
@@ -219,19 +240,22 @@ const Login = ({navigation}) => {
 
 
                 <TouchableOpacity>
-                    <Text style={{color: theme.COLORS.SECONDARY, marginTop:15}}>Forgot password?</Text>
+                    <Text style={{color: theme.COLORS.DEFAULT, marginTop:15}}>Forgot password?</Text>
                 </TouchableOpacity>
                 <View style={styles.button}>
                     <TouchableOpacity
                         style={styles.signIn}
                         onPress={() => navigation.navigate('Register')}
 
-                    ><Text style={{color: theme.COLORS.SECONDARY, marginTop:15}}>Crear una cuenta</Text>
+                    ><Text style={{color: theme.COLORS.DEFAULT, marginTop:15}}>Crear una cuenta</Text>
                     </TouchableOpacity>
 
                     <LargeButton
                         onPress={() => {loginHandle( data.email, data.password )}}
                         title="Ingresar"/>
+                    <LargeButton
+                        onPress={() => {signInWithGoogleAsync()}}
+                        title="Google"/>
                 </View>
             </Animatable.View>
         </View>
@@ -242,7 +266,7 @@ const Login = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.COLORS.SECONDARY
+        backgroundColor: theme.COLORS.DEFAULT
     },
     header: {
         flex: 1,
@@ -264,7 +288,7 @@ const styles = StyleSheet.create({
         fontSize: 30
     },
     text_footer: {
-        color: theme.COLORS.SECONDARY,
+        color: theme.COLORS.DEFAULT,
         fontSize: 18
     },
     action: {
@@ -285,7 +309,7 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: Platform.OS === 'ios' ? 0 : -12,
         paddingLeft: 10,
-        color: theme.COLORS.SECONDARY,
+        color: theme.COLORS.DEFAULT,
     },
     errorMsg: {
         color: theme.COLORS.ERROR,

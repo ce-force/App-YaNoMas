@@ -1,34 +1,33 @@
 import React from "react";
 import { StyleSheet, Text, View, Dimensions, TextInput } from "react-native";
 
+import Card from "../components/Card";
+
 const InfoArea = (props) => {
+  const getDate = () => {
+    const date = new Date(props.crime.hourDate);
+    return date.toString();
+  };
+
   return (
-    <View style={styles.container}>
+    <Card>
       {props.crime ? (
-        [
+        <View>
           <Text>
-            Localización: {props.crime.coords.latitude},
+            Localización: {props.crime.coords.latitude}
             {props.crime.coords.longitude}
-          </Text>,
-          <Text>Categoría: {props.crime.category}</Text>,
-          <Text>Descripción: {props.crime.description}</Text>,
-        ]
+          </Text>
+          <Text>Categoría: {props.crime.category}</Text>
+          <Text>Descripción: {props.crime.description}</Text>
+          <Text>Fecha: {getDate()}</Text>
+        </View>
       ) : (
         <Text>Seleccione una alerta para ver detalles</Text>
       )}
-    </View>
+    </Card>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    borderRadius: 8,
-    margin: 4,
-    elevation: 1,
-    padding: 12,
-    flexGrow: 1,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default InfoArea;

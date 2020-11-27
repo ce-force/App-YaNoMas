@@ -12,10 +12,10 @@ export const LargeButton = ({ onPress, title }) => (
         <TouchableOpacity
             onPress={onPress}
             style={[styles.signIn, {
-                borderColor: theme.COLORS.SECONDARY,
+                borderColor: theme.COLORS.DEFAULT,
                 borderWidth: 1,
                 marginTop: 15,
-                backgroundColor: theme.COLORS.SECONDARY
+                backgroundColor: theme.COLORS.DEFAULT
             }]}
         >
             <Text style={[styles.textSign, {
