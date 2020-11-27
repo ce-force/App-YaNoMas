@@ -159,6 +159,7 @@ function HomeScreen({ navigation }) {
       onPress={sendAlert}
     >
       <Text style={{ fontSize: 24, fontWeight: "bold" }}>Estado de Alerta</Text>
+      <Text>(Se notificará a tu círculo)</Text>
     </TouchableOpacity>
   );
 
@@ -168,11 +169,11 @@ function HomeScreen({ navigation }) {
         style={[styles.emergencytBtn, styles.cancelBtn]}
         onPress={cancelAlert}
       >
-        <Text style={{ fontSize: 24 }}>(Estado de Alerta activo)</Text>
+        <Text style={{ fontSize: 24 }}>Emergencia en 5min</Text>
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>
           Desactivar alerta
         </Text>
-        <Text style={{ fontSize: 24 }}>Emergencia en 5min</Text>
+        <Text style={{ fontSize: 24 }}>(Estado de Alerta activo)</Text>
       </TouchableOpacity>
     );
   }
@@ -181,6 +182,7 @@ function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <TouchableOpacity style={styles.emergencytBtn} onPress={sendEmergency}>
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>Emergencia</Text>
+        <Text>(Se notificará a tu círculo)</Text>
       </TouchableOpacity>
       {alertButton}
     </View>

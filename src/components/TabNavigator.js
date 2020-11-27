@@ -4,7 +4,7 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import HomeScreen from "../screens/HomeScreen";
 import Theme from "../constants/Theme";
 import SettingsScreen from "../screens/SettingsScreen";
-import CrimesScreen from "../screens/CrimesScreen";
+import CrimesScreen from "../screens/CrimesScreen2";
 import CircleScreen from "../screens/CircleScreen2";
 import InformationScreen from "../screens/InformationScreen";
 import StatsScreen from "../screens/StatsScreen";

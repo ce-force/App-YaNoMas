@@ -5,6 +5,7 @@ const Card = (props) => <View style={styles.container}>{props.children}</View>;
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: "white",
     borderRadius: 8,
     margin: 8,
     elevation: 1,
