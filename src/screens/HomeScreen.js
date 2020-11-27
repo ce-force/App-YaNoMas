@@ -3,10 +3,8 @@ import { StyleSheet, View, SafeAreaView, Alert } from "react-native";
 import currentTheme from "./../constants/Theme";
 import { Block, Button, Text, theme } from "galio-framework";
 import * as Location from "expo-location";
-import { getVolume, setVolume, getMaxVolume, onVolumeChange } from 'react-native-volume';
 
-
-function HomeaScreen({navigation}){
+function HomeScreen({navigation}){
 
   const currentLocation = async () => {
     let { status } = await Location.requestPermissionsAsync();
@@ -52,7 +50,6 @@ function HomeaScreen({navigation}){
               <Button style={styles.alertBtn} onPress={() => activateEmergencyState()}>Emergencia</Button>
               <Button style={styles.alertBtn} onPress={() => activateAlertState()}>Estado de Alerta</Button>
           </View>
-          <Button style={styles.alertBtn} onPress={() =>  navigation.navigate("ManageUsers")}>Administrar Usuarios</Button>
 
         </View>
     );

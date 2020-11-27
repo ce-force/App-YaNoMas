@@ -32,11 +32,6 @@ function SettingsScreen({navigation}){
       icon: "bell"
     },
     {
-      id:"yanomas-v1.0.0-settings-circlemanagement",
-      title: "Manejo de Círculo",
-      icon: "circle-slice-6"
-    },
-    {
       id:"yanomas-v1.0.0-settings-locationsharing",
       title: "Ubicación",
       icon: "share"
@@ -53,11 +48,6 @@ function SettingsScreen({navigation}){
       id:"yanomas-v1.0.0-settings-privacy",
       title: "Privacidad y Seguridad",
       icon: "key"
-    },
-    {
-      id:"yanomas-v1.0.0-settings-support",
-      title: "Soporte",
-      icon: "information"
     },
     {
       id:"yanomas-v1.0.0-settings-logout",
@@ -117,9 +107,6 @@ function SettingsScreen({navigation}){
       case "bell":
         navigation.navigate("NotificationsSettings");
         break;
-      case "circle-slice-6":
-        navigation.navigate("CircleManagement");
-        break;
       case "share":
         navigation.navigate("LocationSettings");
         break;
@@ -128,9 +115,6 @@ function SettingsScreen({navigation}){
         break;
       case "key":
         navigation.navigate("AccountScreen");
-        break;
-      case "information":
-        showToast("PÁGINA DE SOPORTE");
         break;
       case "logout":
         logOut();
