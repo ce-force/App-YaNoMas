@@ -20,6 +20,7 @@
       "supportsTablet": true
     },
     "android": {
+      "useNextNotificationsApi": true,
       "adaptiveIcon": {
         "foregroundImage": "./assets/imgs/yanomas-iconv1.png",
         "backgroundColor": "#FFFFFF"

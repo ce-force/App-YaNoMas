@@ -1,5 +1,5 @@
-import React from "react";
-import { Text, View, TextInput } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import { Text, View, TextInput, Alert, ActivityIndicator } from "react-native";
 import { Dimensions } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import {
@@ -15,6 +15,10 @@ import Card from "../components/Card";
 import Input from "../components/Input";
 import Title from "../components/Title";
 import { ScrollView } from "react-native-gesture-handler";
+import { Value } from "react-native-reanimated";
+import { UserContext } from "../communication/UserContext";
+import IconButton from "../components/IconButton";
+import { baseURL } from "../constants/utils";
 
 const FRECUENCY = {
   acoso: 5,
@@ -22,6 +26,37 @@ const FRECUENCY = {
   asalto: 10,
   "actividad sospechosa": 5,
 };
+
+const REGIONS = [
+  {
+    label: "Cartago",
+    value: "Cartago",
+  },
+  {
+    label: "Limón",
+    value: "Limón",
+  },
+  {
+    label: "San José",
+    value: "San José",
+  },
+  {
+    label: "Heredia",
+    value: "Heredia",
+  },
+  {
+    label: "Puntarenas",
+    value: "Puntarenas",
+  },
+  {
+    label: "Guanacaste",
+    value: "Guanacaste",
+  },
+  {
+    label: "Alajuela",
+    value: "Alajuela",
+  },
+];
 
 const chartConfig = {
   backgroundGradientFrom: "#1E2923",
@@ -35,31 +70,95 @@ const chartConfig = {
 };
 
 export default function StatsScreen() {
-  const sum = Object.keys(FRECUENCY)
-    .map((key) => FRECUENCY[key])
-    .reduce((sum, el) => sum + el);
+  const [getGlobalUser, setGlobalUser] = useContext(UserContext);
+  const [frecuency, setFrecuency] = useState(null);
+  const [region, setRegion] = useState("");
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const data = {
-    labels: Object.keys(FRECUENCY), // optional
-    data: Object.keys(FRECUENCY).map((key) => FRECUENCY[key] / sum),
+  const fetchData = async () => {
+    const user = await getGlobalUser();
+    setCurrentUser(user);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const getFrecuency = async () => {
+    if (!region) {
+      Alert.alert("Por favor seleccione una región");
+      return;
+    }
+    setLoading(true);
+    let response = await fetch(baseURL + "/alerts/frecuency", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        uid: currentUser.uid,
+      },
+      body: JSON.stringify({ region: region }),
+    });
+    let responseJson = await response.json();
+
+    console.log(responseJson);
+    setFrecuency(responseJson);
+    setLoading(false);
+  };
+
+  if (loading) {
+    return (
+      <View>
+        <ActivityIndicator color="blue" size="large"></ActivityIndicator>
+      </View>
+    );
+  }
+
+  let sum = 0;
+  let data = { labels: [], data: [] };
+  let frencuencies = null;
+  if (frecuency) {
+    sum = Object.keys(frecuency)
+      .map((key) => frecuency[key])
+      .reduce((sum, el) => sum + el);
+
+    data = {
+      labels: Object.keys(frecuency), // optional
+      data: Object.keys(frecuency).map((key) => frecuency[key] / sum),
+    };
+
+    frencuencies = Object.keys(frecuency).map((key) => (
+      <Card key={key}>
+        <Text>
+          {key}: {frecuency[key]}
+        </Text>
+      </Card>
+    ));
+  }
+
   return (
     <Card>
       <Title>Estadísticas</Title>
-      <Picker>
+      <Picker
+        onValueChange={(val) => {
+          if (val) {
+            setRegion(val);
+          }
+        }}
+        selectedValue={region}
+      >
         <Picker.Item label="Seleccione una provincia" />
+        {REGIONS.map((el) => (
+          <Picker.Item key={el.label} label={el.label} value={el.value} />
+        ))}
       </Picker>
-      {Object.keys(FRECUENCY).map((key) => (
-        <Card key={key}>
-          <Text>
-            {key}: {FRECUENCY[key]}
-          </Text>
-        </Card>
-      ))}
+      <IconButton title="Actualizar" clicked={getFrecuency}></IconButton>
+      {frencuencies}
       <ScrollView horizontal>
         <ProgressChart
           data={data}
-          width={400}
+          width={500}
           height={220}
           strokeWidth={16}
           radius={32}

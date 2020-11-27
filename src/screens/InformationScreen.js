@@ -29,7 +29,7 @@ function InformationScreen(){
 
     // Fetch data from api
     useEffect(() => {
-        fetch(baseURL + 'informations')
+        fetch(baseURL + '/informations')
             .then((response) => response.json())
             .then((responseJson) => {
                 setCustomData(responseJson);

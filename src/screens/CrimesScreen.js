@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -11,12 +11,14 @@ import * as Location from "expo-location";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { baseURL } from "../constants/utils";
+import * as firebase from "firebase";
 
 import Title from "../components/Title";
 import Map from "../components/Map";
 import InfoArea from "../components/InfoArea";
 import IconButton from "../components/IconButton";
 import InputArea from "../components/InputArea";
+import { UserContext } from "../communication/UserContext";
 
 const ALERTS = [
   {
@@ -54,8 +56,8 @@ const CRIMES = [
     value: "Actividad sospechosa",
   },
   {
-    label: "Violación",
-    value: "Violación",
+    label: "Violencia",
+    value: "Violencia",
   },
   {
     label: "Asalto",
@@ -68,8 +70,20 @@ const CRIMES = [
 ];
 
 const CrimesScreen = () => {
+  const [getGlobalUser, setGlobalUser] = useContext(UserContext);
   const [loadingGPS, setLoadingGPS] = useState(false);
   const [reporting, setReporting] = useState(false);
+  const [auth, setAuth] = useState();
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const fetchData = async () => {
+    const user = await getGlobalUser();
+    setCurrentUser(user);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   let map = useRef(null);
   const [crime, setCrime] = useState(null);
@@ -116,10 +130,14 @@ const CrimesScreen = () => {
   };
 
   const getCrimesFromApi = async () => {
+    console.log(currentUser);
     try {
-      let response = await fetch(baseURL + "/alerts");
-      let alerts = await response.json();
-      setAlerts(alerts);
+      let response = await fetch(baseURL + "/alerts", {
+        headers: { uid: currentUser.uid },
+      });
+      let responseJson = await response.json();
+
+      setAlerts(responseJson);
     } catch (error) {
       console.error(error);
     }
@@ -136,6 +154,7 @@ const CrimesScreen = () => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        uid: currentUser.uid,
       },
       body: JSON.stringify({
         category: category,
