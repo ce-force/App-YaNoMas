@@ -11,7 +11,6 @@ import { firebaseConfig } from "./config/FirebaseConfig";
 import TabNavigator from "./src/components/TabNavigator";
 import AccountScreen from "./src/screens/Settings/AccountSettings";
 import NotificationsSettings from "./src/screens/Settings/NotificationsSettings";
-import CircleManagement from "./src/screens/Settings/CircleManagement";
 import LocationSettings from "./src/screens/Settings/LocationSettings";
 import currentTheme from "./src/constants/Theme";
 

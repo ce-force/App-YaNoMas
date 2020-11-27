@@ -1,42 +1,71 @@
-import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, PickerIOS } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import React, {useState} from "react";
+import { StyleSheet, View, SafeAreaView, Alert } from "react-native";
+import currentTheme from "./../constants/Theme";
+import { Block, Button, Text, theme } from "galio-framework";
+import * as Location from "expo-location";
 
-import * as firebase from "firebase";
+function HomeScreen({navigation}){
 
-function HomeScreen() {
-  /*var firebaseConfig = {
-    apiKey: "AIzaSyChHW4ISX4IwTf5JtrICcWk69WePptA-FI",
-    authDomain: "programathon-a64e7.firebaseapp.com",
-    databaseURL: "https://programathon-a64e7.firebaseio.com",
-    projectId: "programathon-a64e7",
-    storageBucket: "programathon-a64e7.appspot.com",
-    messagingSenderId: "369883803944",
-    appId: "1:369883803944:web:dfafd94de159aeb73be01d",
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  firebase
-    .database()
-    .ref("/users/lol")
-    .on("value", (snapshot) => {
-      console.log(snapshot.val());
-    });*/
+  const currentLocation = async () => {
+    let { status } = await Location.requestPermissionsAsync();
+    let tmpLocation = await Location.getCurrentPositionAsync({});
+  }
 
-  return (
-    <View style={styles.container}>
-      <Text>Home Screen</Text>
-    </View>
-  );
+  const activateEmergencyState = () => {
+    return fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      body: JSON.stringify({
+        currentUserMail: 'currentusername',
+        location: 'location',
+        state: 'EMERGENCY'
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => alert(JSON.stringify(json)))
+  } 
+
+  const activateAlertState = () => {
+    currentLocation();
+    return fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST',
+      body: JSON.stringify({
+        currentUserMail: 'currentusername',
+        location: 'location',
+        state: 'ALERT'
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then((response) => response.json())
+      .then((json) => alert(JSON.stringify(json)))
+  } 
+
+    return (
+        <View style={styles.container}>
+          <View style={{ flex: 1, flexDirection: "row" }}>
+              <Button style={styles.alertBtn} onPress={() => activateEmergencyState()}>Emergencia</Button>
+              <Button style={styles.alertBtn} onPress={() => activateAlertState()}>Estado de Alerta</Button>
+          </View>
+
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+    container: {
+      flex: 1,
+      backgroundColor: "white",
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    alertBtn:{
+      backgroundColor: currentTheme.COLORS.DEFAULT
+    }
+    
+  });
 
 export default HomeScreen;
