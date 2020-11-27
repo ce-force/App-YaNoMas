@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import {
   StyleSheet,
   View,
@@ -18,6 +18,7 @@ import Map from "../components/Map";
 import InfoArea from "../components/InfoArea";
 import IconButton from "../components/IconButton";
 import InputArea from "../components/InputArea";
+import { UserContext } from "../communication/UserContext";
 
 const ALERTS = [
   {
@@ -55,8 +56,8 @@ const CRIMES = [
     value: "Actividad sospechosa",
   },
   {
-    label: "Violación",
-    value: "Violación",
+    label: "Violencia",
+    value: "Violencia",
   },
   {
     label: "Asalto",
@@ -69,20 +70,19 @@ const CRIMES = [
 ];
 
 const CrimesScreen = () => {
+  const [getGlobalUser, setGlobalUser] = useContext(UserContext);
   const [loadingGPS, setLoadingGPS] = useState(false);
   const [reporting, setReporting] = useState(false);
   const [auth, setAuth] = useState();
+  const [currentUser, setCurrentUser] = useState(null);
+
+  const fetchData = async () => {
+    const user = await getGlobalUser();
+    setCurrentUser(user);
+  };
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        console.log(user.uid);
-        setAuth(user.uid);
-      } else {
-        navigation.navigate("Login");
-        console.log("nada");
-      }
-    });
+    fetchData();
   }, []);
 
   let map = useRef(null);
@@ -130,12 +130,14 @@ const CrimesScreen = () => {
   };
 
   const getCrimesFromApi = async () => {
+    console.log(currentUser);
     try {
       let response = await fetch(baseURL + "/alerts", {
-        headers: { uid: auth },
+        headers: { uid: currentUser.uid },
       });
-      let alerts = await response.json();
-      setAlerts(alerts);
+      let responseJson = await response.json();
+
+      setAlerts(responseJson);
     } catch (error) {
       console.error(error);
     }
@@ -152,6 +154,7 @@ const CrimesScreen = () => {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        uid: currentUser.uid,
       },
       body: JSON.stringify({
         category: category,

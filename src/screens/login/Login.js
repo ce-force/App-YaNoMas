@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   View,
   Text,
@@ -18,12 +18,15 @@ import firebase from "firebase";
 import theme from "../../constants/Theme";
 import { LargeButton } from "../../components/LargeButton";
 import TabNavigator from "../../components/TabNavigator";
+import { UserContext } from "../../communication/UserContext";
 
 import * as Google from "expo-google-app-auth";
 import { baseURL } from "../../constants/utils";
 import * as GoogleSignIn from "expo-google-sign-in";
 
 const Login = ({ navigation }) => {
+  const [getGlobalUser, setGlobalUser] = useContext(UserContext);
+
   // Variables
   const [data, setData] = React.useState({
     email: "",

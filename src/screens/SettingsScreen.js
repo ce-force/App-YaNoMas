@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   StyleSheet,
   Dimensions,
@@ -16,6 +16,7 @@ import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import { NavigationActions, StackActions } from "react-navigation";
 import * as firebase from "firebase";
 import { baseURL } from "../constants/utils";
+import { UserContext } from "../communication/UserContext";
 
 import IconButton from "../components/IconButton";
 import currentTeme from "../constants/Theme";
@@ -25,19 +26,15 @@ const { width, height } = Dimensions.get("screen");
 const thumbMeasure = (width - 48 - 32) / 3;
 
 function SettingsScreen({ navigation }) {
+  const [getGlobalUser, setGlobalUser] = useContext(UserContext);
   const [currentUser, setCurrentUser] = useState({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
       setLoading(true);
-      const user = firebase.auth().currentUser;
-      const response = await fetch(baseURL + "/users/me", {
-        headers: { uid: user.uid },
-      });
-      const responseJson = await response.json();
-      setCurrentUser(responseJson);
-      console.log(responseJson);
+      const user = await getGlobalUser();
+      setCurrentUser(user);
       setLoading(false);
     }
     fetchData();

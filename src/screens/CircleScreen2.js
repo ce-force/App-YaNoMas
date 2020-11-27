@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   ScrollView,
   View,
@@ -15,6 +15,7 @@ import Title from "../components/Title";
 import SettingsItem from "../components/SettingsItem";
 import { baseURL } from "../constants/utils";
 import IconButton from "../components/IconButton";
+import { UserContext } from "../communication/UserContext";
 
 const REQUESTS = [
   { userId: "1234", name: "Juan cho" },
@@ -29,6 +30,7 @@ const PERSONS = [
 const EMAIL = "reds@gmail.com";
 
 export default function CircleScreen() {
+  const [getGlobalUser, setGlobalUser] = useContext(UserContext);
   const [newPerson, setNewPerson] = useState("");
   const [persons, setPersons] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -41,12 +43,8 @@ export default function CircleScreen() {
 
   const fetchData = async () => {
     setRefreshing(true);
-    const user = firebase.auth().currentUser;
-    const response = await fetch(baseURL + "/users/me", {
-      headers: { uid: user.uid },
-    });
-    const responseJson = await response.json();
-    setCurrentUser(responseJson);
+    const user = await getGlobalUser(true);
+    setCurrentUser(user);
     setRefreshing(false);
   };
 
