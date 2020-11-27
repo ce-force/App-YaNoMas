@@ -15,6 +15,7 @@ import LocationSettings from "./src/screens/Settings/LocationSettings";
 import currentTheme from "./src/constants/Theme";
 
 import { UserContext, UserProvider } from "./src/communication/UserContext";
+import CircleScreen from "./src/screens/CircleScreen2";
 
 const Stack = createStackNavigator();
 
@@ -48,7 +49,7 @@ const App = () => {
           />
           <Stack.Screen
             name="CircleManagement"
-            component={CircleManagement}
+            component={CircleScreen}
             options={{ headerShown: true }}
           />
           <Stack.Screen
