@@ -14,4 +14,4 @@ export const firebaseConfig = {
 
 export const ANDROID_CLIENT_ID = "587503203603-tfgupgvd3u5kn8ush0uanl4f47r042s2.apps.googleusercontent.com";
 export const IOS_CLIENT_ID = "587503203603-vn67vl0mfrjms73u56art40pph41badt.apps.googleusercontent.com";
-export const FACEBOOK_APP_ID = "";
+export const FACEBOOK_APP_ID = "1280884385579270";
