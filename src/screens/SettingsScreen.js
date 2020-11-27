@@ -89,7 +89,7 @@ function SettingsScreen({ navigation }) {
       icon: "bell",
     },
     {
-      id:"yanomas-v1.0.0-settings-locationsharing",
+      id: "yanomas-v1.0.0-settings-locationsharing",
       title: "Ubicación",
       icon: "share",
     },
@@ -107,7 +107,7 @@ function SettingsScreen({ navigation }) {
       icon: "key",
     },
     {
-      id:"yanomas-v1.0.0-settings-logout",
+      id: "yanomas-v1.0.0-settings-logout",
       title: "Cerrar Sesión",
       icon: "logout",
     },
@@ -155,6 +155,7 @@ function SettingsScreen({ navigation }) {
       .then(
         () => {
           ToastAndroid.show("Cerrando Sesión...", ToastAndroid.SHORT);
+          setCurrentUser(null);
           navigation.navigate("Login");
         },
         (error) => {
