@@ -19,10 +19,15 @@ import theme from '../../constants/Theme'
 import {LargeButton} from "../../components/LargeButton";
 import TabNavigator from "../../components/TabNavigator";
 
-
-import * as Google from 'expo-google-app-auth'
+import * as Facebook from 'expo-facebook'
+import * as Google from 'expo-google-app-auth';
+import * as GoogleSignIn from 'expo-google-sign-in';
+import {
+    FACEBOOK_APP_ID,
+    ANDROID_CLIENT_ID,
+    IOS_CLIENT_ID
+} from '../../../config/FirebaseConfig'
 import {baseURL} from "../../constants/utils";
-import * as GoogleSignIn from "expo-google-sign-in";
 
 
 const Login = ({navigation}) => {
@@ -133,9 +138,86 @@ const Login = ({navigation}) => {
                 }, (error) => { Alert.alert(error.message); });
     };
 
-    const signInWithGoogleAsync = async () => {
+    const isUserEqual = (googleUser, firebaseUser) => {
+        if (firebaseUser) {
+            let providerData = firebaseUser.providerData;
+            for (let i = 0; i < providerData.length; i++) {
+                if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+                    providerData[i].uid === googleUser.getBasicProfile().getId()) {
+                    // We don't need to reauth the Firebase connection.
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
 
-    }
+    const onSignIn = (googleUser)  => {
+        // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+        let unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
+            unsubscribe();
+            // Check if we are already signed-in Firebase with the correct user.
+            if (!isUserEqual(googleUser, firebaseUser)) {
+                // Build Firebase credential with the Google ID token.
+                let credential = firebase.auth.GoogleAuthProvider.credential(
+                    googleUser.idToken,
+                    googleUser.accessToken);
+                // Sign in with credential from the Google user.
+                firebase.auth().signInWithCredential(credential).then(function(result){
+                    // Post to MongoDB
+                    fetch(baseURL + "users", {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            email: result.user.email,
+                            uid: result.user.uid,
+                            name: result.user.displayName
+                        }),
+                    });
+                    firebase
+                        .database()
+                        .ref('/users'+result.user.uid)
+                        .set({
+                            gmail:result.user.email,
+                            name:result.user.name,
+                        })
+                        .then(function(snapshot){
+                        });
+                }).catch(function(error) {
+                    let errorCode = error.code;
+                    let errorMessage = error.message;
+                    let email = error.email;
+                    let credential = error.credential;
+                });
+            } else {
+                console.log('User already signed-in Firebase.');
+            }
+        }.bind(this));
+    };
+
+    const signInWithGoogleAsync = async () => {
+        try {
+            const result = await Google.logInAsync({
+                androidClientId: ANDROID_CLIENT_ID,
+                iosClientId: IOS_CLIENT_ID,
+                behavior: 'web',
+                scopes: ['profile', 'email']
+            });
+
+            if (result.type === 'success') {
+                onSignIn(result);
+
+                return result.accessToken;
+            } else {
+                return { cancelled: true };
+            }
+        } catch (e) {
+            return { error: true };
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -247,9 +329,21 @@ const Login = ({navigation}) => {
                     <LargeButton
                         onPress={() => {loginHandle( data.email, data.password )}}
                         title="Ingresar"/>
-                    <LargeButton
-                        onPress={() => {signInWithGoogleAsync()}}
-                        title="Google"/>
+                    <TouchableOpacity
+                        style={{ width: "86%", marginTop: 10 }}
+                        onPress={() => signInWithGoogleAsync()}>
+                        <View style={styles.googleButton}>
+                            <Text
+                                style={{
+                                    letterSpacing: 0.5,
+                                    fontSize: 16,
+                                    color: "#707070"
+                                }}
+                            >
+                                Continue with Google
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </Animatable.View>
         </View>
@@ -308,6 +402,16 @@ const styles = StyleSheet.create({
     errorMsg: {
         color: theme.COLORS.ERROR,
         fontSize: 14,
+    },
+    googleButton: {
+        backgroundColor: "#FFFFFF",
+        height: 44,
+        flexDirection: "row",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 22,
+        borderWidth: 1,
+        borderColor: "#707070"
     }
 });
 

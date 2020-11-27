@@ -87,7 +87,7 @@ const Register = ({navigation}) => {
                     {text: 'Okay'}]);
 
                 // Post to MongoDB
-                fetch(baseURL + "/users", {
+                fetch(baseURL + "users", {
                     method: "POST",
                     headers: {
                         Accept: "application/json",
