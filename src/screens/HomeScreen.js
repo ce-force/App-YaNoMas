@@ -155,7 +155,7 @@ function HomeScreen({ navigation }) {
 
   let alertButton = (
     <TouchableOpacity
-      style={[styles.emergencytBtn, styles.alertBtn]}
+      style={[ styles.alertBtn]}
       onPress={sendAlert}
     >
       <Text style={{ fontSize: 24, fontWeight: "bold" }}>Estado de Alerta</Text>
@@ -165,9 +165,8 @@ function HomeScreen({ navigation }) {
   if (alertActive) {
     alertButton = (
       <TouchableOpacity
-        style={[styles.emergencytBtn, styles.cancelBtn]}
-        onPress={cancelAlert}
-      >
+        style={[styles.alertBtn, styles.cancelBtn]}
+        onPress={cancelAlert}>
         <Text style={{ fontSize: 24 }}>(Estado de Alerta activo)</Text>
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>
           Desactivar alerta
@@ -190,21 +189,28 @@ function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ccc",
-  },
-  alertBtn: {
-    backgroundColor: "yellow",
+    backgroundColor: currentTheme.COLORS.WHITE,
+    alignItems: "center"
   },
   cancelBtn: {
-    backgroundColor: "grey",
+    backgroundColor: currentTheme.COLORS.BORDER_COLOR,
+  },
+  alertBtn:{
+    backgroundColor: currentTheme.COLORS.YELLOW,
+    borderRadius:600,
+    height: 200,
+    width: 200, 
+    elevation: 10,
+    alignItems: "center",
+    justifyContent: "center",
   },
   emergencytBtn: {
-    backgroundColor: "red",
-    margin: 24,
-    borderRadius: 16,
-    elevation: 5,
-    height: 240,
-    padding: 8,
+    backgroundColor: "#fb0453",
+    borderRadius:600,
+    height: 300,
+    width: 300, 
+    elevation: 10,
+    margin:100,
     alignItems: "center",
     justifyContent: "center",
   },

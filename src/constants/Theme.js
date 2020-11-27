@@ -10,6 +10,8 @@ export default {
         ERROR: '#F5365C',
         SUCCESS: '#2DCE89',
         WARNING: '#FB6340',
+        RED: '#fb0453',
+        YELLOW: '#fddb3a',
         /*not yet changed */
         MUTED: '#ADB5BD',
         INPUT: '#DCDCDC',

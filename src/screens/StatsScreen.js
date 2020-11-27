@@ -153,13 +153,16 @@ export default function StatsScreen() {
           <Picker.Item key={el.label} label={el.label} value={el.value} />
         ))}
       </Picker>
-      <IconButton title="Actualizar" clicked={getFrecuency}></IconButton>
+      <IconButton
+          title="Actualizar"
+          clicked={getFrecuency}
+        ></IconButton>
       {frencuencies}
       <ScrollView horizontal>
         <ProgressChart
           data={data}
           width={500}
-          height={220}
+          height={500}
           strokeWidth={16}
           radius={32}
           chartConfig={chartConfig}
