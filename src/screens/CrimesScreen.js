@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -11,6 +11,7 @@ import * as Location from "expo-location";
 import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { baseURL } from "../constants/utils";
+import * as firebase from "firebase";
 
 import Title from "../components/Title";
 import Map from "../components/Map";
@@ -70,6 +71,19 @@ const CRIMES = [
 const CrimesScreen = () => {
   const [loadingGPS, setLoadingGPS] = useState(false);
   const [reporting, setReporting] = useState(false);
+  const [auth, setAuth] = useState();
+
+  useEffect(() => {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log(user.uid);
+        setAuth(user.uid);
+      } else {
+        navigation.navigate("Login");
+        console.log("nada");
+      }
+    });
+  }, []);
 
   let map = useRef(null);
   const [crime, setCrime] = useState(null);
@@ -117,7 +131,9 @@ const CrimesScreen = () => {
 
   const getCrimesFromApi = async () => {
     try {
-      let response = await fetch(baseURL + "/alerts");
+      let response = await fetch(baseURL + "/alerts", {
+        headers: { uid: auth },
+      });
       let alerts = await response.json();
       setAlerts(alerts);
     } catch (error) {

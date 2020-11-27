@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Dimensions,
@@ -7,15 +7,17 @@ import {
   Image,
   ImageBackground,
   Platform,
-  FlatList,
   ToastAndroid,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { Block, Button, Text, theme } from "galio-framework";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
-import firebase from "firebase";
 import { NavigationActions, StackActions } from "react-navigation";
+import * as firebase from "firebase";
+import { baseURL } from "../constants/utils";
 
+import IconButton from "../components/IconButton";
 import currentTeme from "../constants/Theme";
 import { HeaderHeight, AppVersion, TeamName } from "../constants/utils";
 import Images from "../constants/Images";
@@ -23,6 +25,66 @@ const { width, height } = Dimensions.get("screen");
 const thumbMeasure = (width - 48 - 32) / 3;
 
 function SettingsScreen({ navigation }) {
+  const [currentUser, setCurrentUser] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    async function fetchData() {
+      setLoading(true);
+      const user = firebase.auth().currentUser;
+      const response = await fetch(baseURL + "/users/me", {
+        headers: { uid: user.uid },
+      });
+      const responseJson = await response.json();
+      setCurrentUser(responseJson);
+      console.log(responseJson);
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
+
+  const deleteAccount = () => {
+    const user = firebase.auth().currentUser;
+    user
+      .delete()
+      .then(() => {
+        fetch(baseURL + "/users/" + currentUser._id, {
+          method: "DELETE",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            uid: currentUser.uid,
+          },
+        });
+        Alert.alert("Usuario eliminado existosamente");
+        navigation.navigate("Login");
+      })
+      .catch((error) => {
+        firebase
+          .auth()
+          .signOut()
+          .then(
+            () => {
+              Alert.alert(
+                "Para poder eliminar su cuenta correctamente debe volver a verificar sus credenciales y posteriormente podra eliminarla"
+              );
+              navigation.navigate("Login");
+            },
+            (error) => {
+              Alert.alert(error.message);
+            }
+          );
+      });
+  };
+
+  if (loading) {
+    return (
+      <View>
+        <ActivityIndicator color="blue" size="large"></ActivityIndicator>
+      </View>
+    );
+  }
+
   const GENERALSETTINGSDATA = [
     {
       id: "yanomas-v1.0.0-settings-notifications",
@@ -106,7 +168,7 @@ function SettingsScreen({ navigation }) {
       .then(
         () => {
           ToastAndroid.show("Cerrando Sesión...", ToastAndroid.SHORT);
-          navigation.navigate('Login');
+          navigation.navigate("Login");
         },
         (error) => {
           Alert.alert(error.message);
@@ -168,13 +230,13 @@ function SettingsScreen({ navigation }) {
                     size={28}
                     style={{ color: currentTeme.COLORS.TEXT }}
                   >
-                    Jane Doe, 20
+                    {currentUser.name}
                   </Text>
                   <Text
                     size={16}
                     style={{ marginTop: 10, color: currentTeme.COLORS.TEXT }}
                   >
-                    Cartago, COSTA RICA
+                    {currentUser.email}
                   </Text>
                 </Block>
                 <Block middle style={{ marginTop: 10 }}>
@@ -182,43 +244,31 @@ function SettingsScreen({ navigation }) {
                 </Block>
               </Block>
               <Block style={styles.info}>
-                <Block row space="between">
-                  <Block middle>
-                    <Text
-                      bold
-                      size={18}
-                      style={{
-                        marginBottom: 4,
-                        color: currentTeme.COLORS.TEXT,
-                      }}
-                    >
-                      10
-                    </Text>
-                    <Text size={12} color={theme.COLORS.TEXT}>
-                      En mí circulo
-                    </Text>
-                  </Block>
-                  <Block middle>
-                    <Text
-                      bold
-                      size={18}
-                      style={{
-                        marginBottom: 4,
-                        color: currentTeme.COLORS.TEXT,
-                      }}
-                    >
-                      10
-                    </Text>
-                    <Text size={12} color={theme.COLORS.TEXT}>
-                      En otros círculos
-                    </Text>
-                  </Block>
+                <Block middle>
+                  <Text
+                    bold
+                    size={18}
+                    style={{
+                      marginBottom: 4,
+                      color: currentTeme.COLORS.TEXT,
+                    }}
+                  >
+                    {currentUser.circle ? currentUser.circle.length : null}
+                  </Text>
+                  <Text size={12} color={theme.COLORS.TEXT}>
+                    En mí circulo
+                  </Text>
                 </Block>
               </Block>
 
               <Block middle style={{ marginTop: 30, marginBottom: 16 }}>
                 <Block style={styles.divider} />
               </Block>
+
+              <IconButton
+                title="Eliminar cuenta"
+                clicked={deleteAccount}
+              ></IconButton>
 
               <Text
                 style={{
@@ -230,13 +280,9 @@ function SettingsScreen({ navigation }) {
                 Configuraciones Generales
               </Text>
 
-              <FlatList
-                data={GENERALSETTINGSDATA}
-                renderItem={({ item }) => (
-                  <Item title={item.title} icon={item.icon} />
-                )}
-                keyExtractor={(item) => item.id}
-              />
+              {GENERALSETTINGSDATA.map((item) => (
+                <Item key={item.id} title={item.title} icon={item.icon} />
+              ))}
 
               <Text
                 style={{
@@ -249,13 +295,9 @@ function SettingsScreen({ navigation }) {
                 Configuraciones Universales
               </Text>
 
-              <FlatList
-                data={UNIVERSALSETTINGSDATA}
-                renderItem={({ item }) => (
-                  <Item title={item.title} icon={item.icon} />
-                )}
-                keyExtractor={(item) => item.id}
-              />
+              {UNIVERSALSETTINGSDATA.map((el) => (
+                <Item key={el.id} title={el.title} icon={el.icon} />
+              ))}
 
               <Block middle style={{ marginTop: 30, marginBottom: 16 }}>
                 <Block style={styles.divider} />

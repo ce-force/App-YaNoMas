@@ -7,6 +7,7 @@ import {
   RefreshControl,
   Alert,
 } from "react-native";
+import * as firebase from "firebase";
 
 import Card from "../components/Card";
 import Input from "../components/Input";
@@ -30,8 +31,24 @@ const EMAIL = "reds@gmail.com";
 export default function CircleScreen() {
   const [newPerson, setNewPerson] = useState("");
   const [persons, setPersons] = useState([]);
-  const [requests, setRequests] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    setRefreshing(true);
+    const user = firebase.auth().currentUser;
+    const response = await fetch(baseURL + "/users/me", {
+      headers: { uid: user.uid },
+    });
+    const responseJson = await response.json();
+    setCurrentUser(responseJson);
+    setRefreshing(false);
+  };
 
   const addPerson = () => {
     fetch(baseURL + "/circle", {
@@ -39,8 +56,9 @@ export default function CircleScreen() {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        uid: currentUser.uid,
       },
-      body: JSON.stringify({ me: EMAIL, friend: newPerson }),
+      body: JSON.stringify({ me: currentUser.email, friend: newPerson }),
     });
     setNewPerson("");
     Alert.alert("¡Solicitud enviada!");
@@ -52,10 +70,11 @@ export default function CircleScreen() {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        uid: currentUser.uid,
       },
-      body: JSON.stringify({ me: EMAIL, friend: email }),
+      body: JSON.stringify({ me: currentUser.email, friend: email }),
     });
-    await getRequests();
+    await fetchData();
     Alert.alert("Solicitud aceptada");
   };
 
@@ -65,27 +84,67 @@ export default function CircleScreen() {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        uid: currentUser.uid,
       },
-      body: JSON.stringify({ me: EMAIL, friend: email }),
+      body: JSON.stringify({ me: currentUser.email, friend: email }),
     });
-    await getRequests();
+    await fetchData();
     Alert.alert("Solicitud rechazada");
   };
 
-  const getRequests = async () => {
-    setRefreshing(true);
-    const response = await fetch(
-      baseURL + "/circle/" + EMAIL
-    ).catch((response) => console.log(response));
-    let requests = await response.json();
-    setRequests(requests);
-    setRefreshing(false);
+  const removePerson = async (email) => {
+    fetch(baseURL + "/circle/delete", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        uid: currentUser.uid,
+      },
+      body: JSON.stringify({ me: currentUser.email, friend: email }),
+    });
+    await fetchData();
+    Alert.alert("Contacto eliminado");
   };
+
+  let myRequests = null;
+  let myCircle = null;
+  let memberCount = 0;
+
+  if (currentUser) {
+    myRequests = currentUser.solicitudes.map((el) => (
+      <Card key={el.email}>
+        <Text> Nombre: {el.name}</Text>
+        <Text> Correo: {el.email}</Text>
+        <View style={{ flex: 1, flexDirection: "row" }}>
+          <IconButton
+            title="Rechazar"
+            clicked={() => rejectPerson(el.email)}
+          ></IconButton>
+          <IconButton
+            title="Aceptar"
+            clicked={() => acceptPerson(el.email)}
+          ></IconButton>
+        </View>
+      </Card>
+    ));
+    myCircle = currentUser.circle.map((el) => (
+      <Card key={el}>
+        <Text>
+          {el.name}: {el.email}
+        </Text>
+        <IconButton
+          title="Eliminar"
+          clicked={() => removePerson(el.email)}
+        ></IconButton>
+      </Card>
+    ));
+    memberCount = currentUser.circle.length;
+  }
 
   return (
     <ScrollView
       refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={getRequests} />
+        <RefreshControl refreshing={refreshing} onRefresh={fetchData} />
       }
     >
       <Card>
@@ -97,29 +156,9 @@ export default function CircleScreen() {
         ></Input>
         <IconButton title="Agregar" clicked={addPerson}></IconButton>
         <Title>Solicitudes</Title>
-        {requests.map((el) => (
-          <Card key={el.email}>
-            <Text> Nombre: {el.name}</Text>
-            <Text> Correo: {el.email}</Text>
-            <View style={{ flex: 1, flexDirection: "row" }}>
-              <IconButton
-                title="Rechazar"
-                clicked={() => rejectPerson(el.email)}
-              ></IconButton>
-              <IconButton
-                title="Aceptar"
-                clicked={() => acceptPerson(el.email)}
-              ></IconButton>
-            </View>
-          </Card>
-        ))}
-        <Title>Mis personas de confianza</Title>
-        {persons.map((el) => (
-          <Card key={el.userId}>
-            <Text>{el.name}</Text>
-            <IconButton title="Eliminar"></IconButton>
-          </Card>
-        ))}
+        {myRequests}
+        <Title>Mi círculo ({memberCount}/6)</Title>
+        {myCircle}
       </Card>
     </ScrollView>
   );
