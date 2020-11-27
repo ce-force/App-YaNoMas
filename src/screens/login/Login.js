@@ -44,7 +44,6 @@ const Login = ({navigation}) => {
                 navigation.navigate('TabNavigator');
             }else{
                 navigation.navigate('Login');
-                console.log("nada");
             }
         })
     };
@@ -135,17 +134,7 @@ const Login = ({navigation}) => {
     };
 
     const signInWithGoogleAsync = async () => {
-        try {
-            await GoogleSignIn.askForPlayServicesAsync();
-            const { type, user } = await GoogleSignIn.signInAsync();
-            if (type === 'success') {
-                await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-                const credential = firebase.auth.GoogleAuthProvider.credential(user.auth.idToken, user.auth.accessToken,);
-                const googleProfileData = await firebase.auth().signInWithCredential(credential);
-            }
-        } catch ({ message }) {
-            alert('login: Error:' + message);
-        }
+
     }
 
     return (
@@ -239,13 +228,13 @@ const Login = ({navigation}) => {
                 </View>
                 { data.isValidPassword ? null :
                     <Animatable.View animation="fadeInLeft" duration={500}>
-                        <Text style={styles.errorMsg}>Password must be 8 characters long.</Text>
+                        <Text style={styles.errorMsg}>La contraseña debe tener al menos 6 caracteres.</Text>
                     </Animatable.View>
                 }
 
 
                 <TouchableOpacity>
-                    <Text style={{color: theme.COLORS.DEFAULT, marginTop:15}}>Forgot password?</Text>
+                    <Text style={{color: theme.COLORS.DEFAULT, marginTop:15}}>¿Olvidó su contraseña?</Text>
                 </TouchableOpacity>
                 <View style={styles.button}>
                     <TouchableOpacity
