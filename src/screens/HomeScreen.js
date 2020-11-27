@@ -20,6 +20,7 @@ Notifications.setNotificationHandler({
 
 function HomeScreen({ navigation }) {
   const [getGlobalUser, setGlobalUser] = useContext(UserContext);
+  const [alertActive, setAlertActive] = useState(false);
 
   useEffect(() => {
     registerForPushNotificationsAsync();
@@ -110,16 +111,78 @@ function HomeScreen({ navigation }) {
     }
   };
 
+  const sendAlert = async () => {
+    try {
+      const user = await getGlobalUser();
+      let response = await fetch(baseURL + "/users/alert", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          uid: user.uid,
+        },
+        body: JSON.stringify({}),
+      });
+      let responseJson = await response.json();
+
+      console.log(responseJson);
+    } catch (error) {
+      console.error(error);
+    }
+    setAlertActive(true);
+  };
+
+  const cancelAlert = async () => {
+    try {
+      const user = await getGlobalUser();
+      let response = await fetch(baseURL + "/users/" + user._id, {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          uid: user.uid,
+        },
+        body: JSON.stringify({ alerta: false }),
+      });
+      let responseJson = await response.json();
+
+      console.log(responseJson);
+    } catch (error) {
+      console.error(error);
+    }
+    setAlertActive(false);
+  };
+
+  let alertButton = (
+    <TouchableOpacity
+      style={[styles.emergencytBtn, styles.alertBtn]}
+      onPress={sendAlert}
+    >
+      <Text style={{ fontSize: 24, fontWeight: "bold" }}>Estado de Alerta</Text>
+    </TouchableOpacity>
+  );
+
+  if (alertActive) {
+    alertButton = (
+      <TouchableOpacity
+        style={[styles.emergencytBtn, styles.cancelBtn]}
+        onPress={cancelAlert}
+      >
+        <Text style={{ fontSize: 24 }}>(Estado de Alerta activo)</Text>
+        <Text style={{ fontSize: 24, fontWeight: "bold" }}>
+          Desactivar alerta
+        </Text>
+        <Text style={{ fontSize: 24 }}>Emergencia en 5min</Text>
+      </TouchableOpacity>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.emergencytBtn} onPress={sendEmergency}>
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>Emergencia</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.emergencytBtn, styles.alertBtn]}>
-        <Text style={{ fontSize: 24, fontWeight: "bold" }}>
-          Estado de Alerta
-        </Text>
-      </TouchableOpacity>
+      {alertButton}
     </View>
   );
 }
@@ -131,6 +194,9 @@ const styles = StyleSheet.create({
   },
   alertBtn: {
     backgroundColor: "yellow",
+  },
+  cancelBtn: {
+    backgroundColor: "grey",
   },
   emergencytBtn: {
     backgroundColor: "red",
