@@ -2,6 +2,7 @@ import {Text, View} from "react-native";
 import {Card} from "react-native-elements";
 import React from "react";
 
+import currentTeme from "../constants/Theme";
 export function MessageItem({ title, image, message }) {
     return (
 

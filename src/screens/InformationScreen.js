@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {StyleSheet, Text, View, SafeAreaView, FlatList, Image, ScrollView} from "react-native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import currentTeme from "../constants/Theme";
@@ -6,13 +6,15 @@ import currentTeme from "../constants/Theme";
 import { Card } from 'react-native-elements'
 import {Picker} from '@react-native-picker/picker';
 import {MessageItem} from "../components/MessageItem";
-
-const customData = require('../../assets/MessageData.json');
+import {baseURL} from "../constants/utils";
 
 
 
 
 function InformationScreen(){
+
+
+    const [customData, setCustomData] = useState([]);
 
     const [category, setCategory] = React.useState({
         type: 'info',
@@ -23,6 +25,19 @@ function InformationScreen(){
         {id: 1, type: "reminder", label: "Recordatorios"},
         {id: 2, type: "contact", label: "Contacto"}
         ];
+
+
+    // Fetch data from api
+    useEffect(() => {
+        fetch(baseURL + 'informations')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                setCustomData(responseJson);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
 
 
     function handleChange(value) {
@@ -39,13 +54,13 @@ function InformationScreen(){
                 itemStyle={{ color:'red', fontWeight:'900', fontSize: 18, padding:30}}>
                 {categories.map(item => <Picker.Item key={item.id} label={item.label} value={item.type}/>)}
             </Picker>
-            <ScrollView style={{ marginBottom: 50, marginTop: 50}}>
+            <ScrollView style={{ marginBottom: 50, marginTop: 55, width: '100%'}}>
             {customData.map(element => { return category.type === element.type ? (
-                                        <MessageItem key={element.id}
+                                        <MessageItem key={element._id}
                                             title={element.title}
                                             image={element.image}
                                             message={element.message}/>)
-                : (<View key={element.id}/>)})
+                : (<View key={element._id}/>)})
             }
 
             </ScrollView>
@@ -74,8 +89,9 @@ const styles = StyleSheet.create({
     picker: {
         top: 50,
         width: 260,
-        fontSize:10,
-        borderRadius: 10,
+        fontSize:20,
+        backgroundColor: currentTeme.COLORS.BORDER_COLOR,
+        color: currentTeme.COLORS.BLACK
     }
   });
 

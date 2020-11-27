@@ -73,7 +73,7 @@ const Login = ({navigation}) => {
 
     // Handle password input changes
     const handlePasswordChange = (val) => {
-        if( val.trim().length >= 8 ) {
+        if( val.trim().length >= 6 ) {
             setData({
                 ...data,
                 password: val,
@@ -118,12 +118,17 @@ const Login = ({navigation}) => {
                 Alert.alert('Listo!', 'Bienvenid@.', [
                 {text: 'Okay'}
             ]);
-                r.user.email;
-                r.user.uid;
-                setData({
-                    ...data,
-                    email: '',
-                    password: ''
+                // Post to MongoDB
+                fetch(baseURL + "/users", {
+                    method: "POST",
+                    headers: {
+                        Accept: "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        email: r.user.email,
+                        uid: r.user.uid
+                    }),
                 });
                 navigation.navigate('TabNavigator');
                 }, (error) => { Alert.alert(error.message); });
