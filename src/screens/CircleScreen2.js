@@ -178,11 +178,7 @@ export default function CircleScreen() {
             )
             :
             (
-    <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={fetchData} />
-      }
-    >
+    <ScrollView>
 
       <View style={styles.topView}>
           <TouchableOpacity
