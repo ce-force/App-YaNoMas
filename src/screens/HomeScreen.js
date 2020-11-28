@@ -37,7 +37,7 @@ function HomeScreen({ navigation }) {
     return tmpLocation;
   };
 
-  registerForPushNotificationsAsync = async () => {
+  const registerForPushNotificationsAsync = async () => {
     const { status: existingStatus } = await Permissions.getAsync(
       Permissions.NOTIFICATIONS
     );

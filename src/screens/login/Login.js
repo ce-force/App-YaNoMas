@@ -163,7 +163,7 @@ const Login = ({navigation}) => {
         // Sign in with credential from the Google user.
         firebase.auth().signInWithCredential(credential).then(function(result){
           // Post to MongoDB
-          fetch(baseURL + "users", {
+          fetch(baseURL + "/users", {
             method: "POST",
             headers: {
               Accept: "application/json",
