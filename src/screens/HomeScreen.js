@@ -212,7 +212,7 @@ function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ccc",
+    backgroundColor: currentTheme.COLORS.BORDER_COLOR,
   },
   alertBtn: {
     backgroundColor: "yellow",
@@ -221,10 +221,10 @@ const styles = StyleSheet.create({
     backgroundColor: "grey",
   },
   emergencytBtn: {
-    backgroundColor: "red",
+    backgroundColor: currentTheme.COLORS.ERROR,
     margin: 24,
-    borderRadius: 16,
-    elevation: 5,
+    borderRadius: 50,
+    elevation: 20,
     height: 240,
     padding: 8,
     alignItems: "center",

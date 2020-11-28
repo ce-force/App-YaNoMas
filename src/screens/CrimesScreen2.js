@@ -22,6 +22,7 @@ import Card from "../components/Card";
 import Map from "../components/Map2";
 import IconButton from "../components/IconButton";
 import Input from "../components/Input";
+import customTheme from "../constants/Theme";
 
 const CRIMES = [
   {
@@ -266,7 +267,7 @@ export default function CrimeScreen(props) {
 
   let reportMarker = reporting ? (
     <Marker coordinate={location} title="GPS">
-      <FontAwesome name="warning" size={32} color="purple" />
+      <FontAwesome name="warning" size={32} color={customTheme.COLOR.ACTIVE} />
     </Marker>
   ) : null;
 
