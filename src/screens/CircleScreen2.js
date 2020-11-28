@@ -208,7 +208,10 @@ export default function CircleScreen() {
           </View>)
           :
           (
-              <ScrollView>
+              <ScrollView
+                  refreshControl={
+                    <RefreshControl refreshing={refreshing} onRefresh={fetchData} />
+                  }>
                 <Title>Mi círculo ({memberCount}/6)</Title>
                 {myCircle}
               </ScrollView>
