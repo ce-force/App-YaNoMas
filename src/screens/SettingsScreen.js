@@ -156,6 +156,7 @@ function SettingsScreen({ navigation }) {
         () => {
           ToastAndroid.show("Cerrando Sesión...", ToastAndroid.SHORT);
           setCurrentUser(null);
+          setLoading(true);
           navigation.navigate("Login");
         },
         (error) => {
@@ -235,7 +236,9 @@ function SettingsScreen({ navigation }) {
                       color: currentTeme.COLORS.TEXT,
                     }}
                   >
-                    {currentUser.circle ? currentUser.circle.length : null}
+                    {currentUser && currentUser.circle
+                      ? currentUser.circle.length
+                      : null}
                   </Text>
                   <Text size={12} color={theme.COLORS.TEXT}>
                     En mí circulo
