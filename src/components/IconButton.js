@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   Button,
   ScrollView,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 
 const IconButton = (props) => (
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   container: {
     padding: 12,
     flex: 1,
-    backgroundColor: "purple",
+    backgroundColor: "#572364",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 8,

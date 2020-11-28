@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {StyleSheet, Text, View, SafeAreaView, FlatList, Image, ScrollView} from "react-native";
+import {StyleSheet, Text, View, SafeAreaView, FlatList, Image, ScrollView, RefreshControl} from "react-native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import currentTeme from "../constants/Theme";
 
@@ -13,6 +13,7 @@ import {baseURL} from "../constants/utils";
 
 function InformationScreen(){
 
+    const [refreshing, setRefreshing] = useState(false);
 
     const [customData, setCustomData] = useState([]);
 
@@ -46,7 +47,7 @@ function InformationScreen(){
 
     return (
         <View style={styles.container}>
-            <Card>
+            <Card style={{marginTop: 15}}>
             <Picker
                 selectedValue={category.type}
                 onValueChange={value => handleChange(value)}

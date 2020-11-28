@@ -165,12 +165,12 @@ export default function CircleScreen() {
               placeholder="correo"
               />
             <TouchableOpacity
-                style={styles.buttonConfirm}
+                style={[styles.buttonDelete, {marginTop: 5}]}
                 onPress={() => { addPerson()}}>
               <Text style={styles.buttonText}>Confirmar</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                style={[styles.buttonConfirm, {backgroundColor: currentTheme.COLORS.ERROR, marginTop: 5}]}
+                style={[styles.buttonDelete, {marginTop: 5}]}
                 onPress={() => { setIsAdding(false)}}>
               <Text style={styles.buttonText}>Cancelar</Text>
             </TouchableOpacity>
@@ -208,9 +208,10 @@ export default function CircleScreen() {
           </View>)
           :
           (
-              <View>
+              <ScrollView>
                 <Title>Mi círculo ({memberCount}/6)</Title>
-                {myCircle}</View>
+                {myCircle}
+              </ScrollView>
           )
       }
 
@@ -252,7 +253,7 @@ const styles = StyleSheet.create({
     backgroundColor: currentTheme.COLORS.WHITE
   },
   buttonConfirm: {
-    height: 50,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     width: '35%',
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
     backgroundColor: currentTheme.COLORS.SUCCESS
   },
   buttonDelete: {
-    height: 50,
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     width: '35%',
@@ -274,7 +275,7 @@ const styles = StyleSheet.create({
     backgroundColor: currentTheme.COLORS.ACTIVE
   },
   buttonText: {
-    fontSize: 20,
+    fontSize: 15,
     color: 'white',
   },
 });
