@@ -6,8 +6,13 @@ import {
   Button,
   RefreshControl,
   Alert,
+  TouchableOpacity,
+  StyleSheet
 } from "react-native";
 import * as firebase from "firebase";
+
+import currentTheme from "../constants/Theme";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import Card from "../components/Card";
 import Input from "../components/Input";
@@ -36,6 +41,8 @@ export default function CircleScreen() {
   const [refreshing, setRefreshing] = useState(false);
 
   const [currentUser, setCurrentUser] = useState(null);
+  const [isAdding, setIsAdding] = useState(false);
+  const [ViewRequests, setViewRequests] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -60,6 +67,8 @@ export default function CircleScreen() {
     });
     setNewPerson("");
     Alert.alert("¡Solicitud enviada!");
+
+    setIsAdding(false);
   };
 
   const acceptPerson = async (email) => {
@@ -111,8 +120,8 @@ export default function CircleScreen() {
   if (currentUser) {
     myRequests = currentUser.solicitudes.map((el) => (
       <Card key={el.email}>
-        <Text> Nombre: {el.name}</Text>
-        <Text> Correo: {el.email}</Text>
+        <Text style={styles.text}> Nombre: {el.name}</Text>
+        <Text style={styles.text}> Correo: {el.email}</Text>
         <View style={{ flex: 1, flexDirection: "row" }}>
           <IconButton
             title="Rechazar"
@@ -127,37 +136,127 @@ export default function CircleScreen() {
     ));
     myCircle = currentUser.circle.map((el) => (
       <Card key={el}>
-        <Text>
-          {el.name}: {el.email}
+        <Text style={styles.text}>
+          {el.name}{"\n"}{"\n"}{el.email}
         </Text>
-        <IconButton
-          title="Eliminar"
-          clicked={() => removePerson(el.email)}
-        ></IconButton>
+        <TouchableOpacity
+            style={styles.buttonDelete}
+            onPress={() => { removePerson(el.email) }}>
+          <Text style={styles.buttonText}>Eliminar</Text>
+        </TouchableOpacity>
       </Card>
     ));
     memberCount = currentUser.circle.length;
   }
 
+  function pressAdd() {
+    setIsAdding(true);
+  }
+
   return (
+      <View>
+        {isAdding === true ? (
+          <View style={{ marginTop: '50%'}}>
+            <Input
+              onChangeText={setNewPerson}
+              value={newPerson}
+              placeholder="correo"
+              />
+            <TouchableOpacity
+                style={styles.buttonConfirm}
+                onPress={() => { addPerson()}}>
+              <Text style={styles.buttonText}>Confirmar</Text>
+            </TouchableOpacity>
+          </View>
+            )
+            :
+            (
     <ScrollView
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={fetchData} />
       }
     >
-      <Card>
-        <Title>Agregar persona de confianza</Title>
-        <Input
-          onChangeText={setNewPerson}
-          value={newPerson}
-          placeholder="correo"
-        ></Input>
-        <IconButton title="Agregar" clicked={addPerson}></IconButton>
-        <Title>Solicitudes</Title>
+
+        <View style={styles.topView}>
+          <TouchableOpacity
+              style={styles.buttonAdd}
+              onPress={() => { pressAdd()}}>
+              <MaterialCommunityIcons name="account-plus" size={50} color={currentTheme.COLORS.SUCCESS} />
+          </TouchableOpacity>
+          <TouchableOpacity
+              style={styles.buttonAdd}
+              onPress={() => { addPerson()}}>
+            <MaterialCommunityIcons name="bell" size={50} color={currentTheme.COLORS.SUCCESS} />
+          </TouchableOpacity>
+        </View>
+
+      <View  style={{marginTop: 50}}>
         {myRequests}
-        <Title>Mi círculo ({memberCount}/6)</Title>
+        <Title >Mi círculo ({memberCount}/6)</Title>
         {myCircle}
-      </Card>
+      </View>
     </ScrollView>
+
+          )}
+            </View>
   );
 }
+
+const styles = StyleSheet.create({
+  topView: {
+    flex: 1,
+    justifyContent: 'space-around',
+    flexDirection: 'row',
+    backgroundColor: currentTheme.COLORS.ACTIVE,
+  },
+  text: {
+    color: currentTheme.COLORS.BLACK,
+    marginBottom: '10%',
+    fontSize: 20,
+  },
+  textInput: {
+    marginTop: 10,
+    paddingLeft: 10,
+    color: currentTheme.COLORS.ACTIVE,
+    fontSize: 20
+  },
+  buttonAdd: {
+    height: 100,
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 50,
+    elevation: 10,
+    marginTop: '15%',
+    marginBottom: -45,
+    borderColor: currentTheme.COLORS.SECONDARY,
+    backgroundColor: currentTheme.COLORS.WHITE
+  },
+  buttonConfirm: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '35%',
+    marginLeft: '32%',
+    borderRadius: 50,
+    elevation: 10,
+    borderColor: currentTheme.COLORS.SECONDARY,
+    backgroundColor: currentTheme.COLORS.SUCCESS
+  },
+  buttonDelete: {
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '35%',
+    marginLeft: '32%',
+    borderRadius: 10,
+    elevation: 10,
+    marginBottom: 10,
+    borderColor: currentTheme.COLORS.SECONDARY,
+    backgroundColor: currentTheme.COLORS.SUCCESS
+  },
+  buttonText: {
+    fontSize: 20,
+    color: 'white',
+  },
+});

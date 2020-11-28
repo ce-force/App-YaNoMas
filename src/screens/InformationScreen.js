@@ -3,7 +3,7 @@ import {StyleSheet, Text, View, SafeAreaView, FlatList, Image, ScrollView} from 
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import currentTeme from "../constants/Theme";
 
-import { Card } from 'react-native-elements'
+import Card from "../components/Card";
 import {Picker} from '@react-native-picker/picker';
 import {MessageItem} from "../components/MessageItem";
 import {baseURL} from "../constants/utils";
@@ -46,6 +46,7 @@ function InformationScreen(){
 
     return (
         <View style={styles.container}>
+            <Card>
             <Picker
                 selectedValue={category.type}
                 onValueChange={value => handleChange(value)}
@@ -54,7 +55,8 @@ function InformationScreen(){
                 itemStyle={{ color:'red', fontWeight:'900', fontSize: 18, padding:30}}>
                 {categories.map(item => <Picker.Item key={item.id} label={item.label} value={item.type}/>)}
             </Picker>
-            <ScrollView style={{ marginBottom: 50, marginTop: 55, width: '100%'}}>
+            </Card>
+            <ScrollView style={{ marginBottom: 50, marginTop: 20, width: '100%'}}>
             {customData.map(element => { return category.type === element.type ? (
                                         <MessageItem key={element._id}
                                             title={element.title}
@@ -87,10 +89,8 @@ const styles = StyleSheet.create({
       paddingLeft: 10
     },
     picker: {
-        top: 50,
         width: 260,
         fontSize:20,
-        backgroundColor: currentTeme.COLORS.BORDER_COLOR,
         color: currentTeme.COLORS.BLACK
     }
   });

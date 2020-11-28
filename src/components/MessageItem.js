@@ -1,27 +1,37 @@
-import {Text, View} from "react-native";
-import {Card} from "react-native-elements";
+import {StyleSheet, Text, View, Image} from "react-native";
 import React from "react";
 
 import currentTeme from "../constants/Theme";
+import Card from "../components/Card";
 export function MessageItem({ title, image, message }) {
     return (
 
         <View>
-
-            <Card style={{borderRadius: 8, marginTop: 50}}>
-                <Card.Title>{title}</Card.Title>
-                <Card.Divider/>
-                <Text style={{marginBottom: 10}}>
+            <Card>
+                <Text style={styles.cardText}>
                     {message}
                 </Text>
-                <Card.Divider/>
-
-                <Card.Image source={{ uri: image, width: 25, height: 25, }}/>
-
+                <View style={styles.container}>
+                <Image style={styles.imageStyle} source={{ uri: image, width: '90%', height: 200 }}/>
+                </View>
             </Card>
-
         </View>
 
     );
 
 }
+
+const styles = StyleSheet.create({
+    container: {
+      alignItems: 'center'
+    },
+    cardText: {
+        fontSize: 15,
+        padding: 20
+    },
+    imageStyle: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10
+    }
+});
