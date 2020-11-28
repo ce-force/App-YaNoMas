@@ -28,7 +28,7 @@ const thumbMeasure = (width - 48 - 32) / 3;
 function SettingsScreen({ navigation }) {
   const [getGlobalUser, setGlobalUser] = useContext(UserContext);
   const [currentUser, setCurrentUser] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -212,13 +212,13 @@ function SettingsScreen({ navigation }) {
                     size={28}
                     style={{ color: currentTeme.COLORS.TEXT }}
                   >
-                    {currentUser.name}
+                    {currentUser ? currentUser.name : null}
                   </Text>
                   <Text
                     size={16}
                     style={{ marginTop: 10, color: currentTeme.COLORS.TEXT }}
                   >
-                    {currentUser.email}
+                    {currentUser ? currentUser.email : null}
                   </Text>
                 </Block>
                 <Block middle style={{ marginTop: 10 }}>

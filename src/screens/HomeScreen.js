@@ -97,7 +97,9 @@ function HomeScreen({ navigation }) {
 
   const sendEmergency = async () => {
     try {
-      console.log("-------------------------------------");
+      console.log("-----------------EMERGENCY--------------------");
+      const location = await getLocation();
+      const date = new Date().toISOString();
       const user = await getGlobalUser();
       let response = await fetch(baseURL + "/users/emergency", {
         method: "POST",
@@ -106,25 +108,15 @@ function HomeScreen({ navigation }) {
           "Content-Type": "application/json",
           uid: user.uid,
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          name: user.name,
+          date: date,
+          location: location,
+        }),
       });
       let responseJson = await response.json();
 
       console.log(responseJson);
-
-      const location = await getLocation();
-      let response2 = await fetch(baseURL + "/users/location", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          uid: user.uid,
-        },
-        body: JSON.stringify({ location: location }),
-      });
-      let responseJson2 = await response2.json();
-
-      console.log(responseJson2);
     } catch (error) {
       console.error(error);
     }
@@ -132,6 +124,9 @@ function HomeScreen({ navigation }) {
 
   const sendAlert = async () => {
     try {
+      console.log("--------------------ALERTA-----------------");
+      const location = await getLocation();
+      const date = new Date().toISOString();
       const user = await getGlobalUser();
       let response = await fetch(baseURL + "/users/alert", {
         method: "POST",
@@ -140,7 +135,11 @@ function HomeScreen({ navigation }) {
           "Content-Type": "application/json",
           uid: user.uid,
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          name: user.name,
+          date: date,
+          location: location,
+        }),
       });
       let responseJson = await response.json();
 
