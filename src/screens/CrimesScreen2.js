@@ -46,7 +46,7 @@ export default function CrimeScreen(props) {
   const [getGlobalUser, setGlobalUser] = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [emergency, setEmergency] = useState(false);
-
+  const [emergencyPending, setEmergencyPending] = useState(false);
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [reporting, setReporting] = useState(false);
@@ -87,13 +87,17 @@ export default function CrimeScreen(props) {
   const getAlerts = async () => {
     setLoading(true);
     try {
-      const user = getGlobalUser();
+      const user = await getGlobalUser();
       let response = await fetch(baseURL + "/alerts", {
         headers: { uid: user.uid },
       });
       let responseJson = await response.json();
 
       setAlerts(responseJson);
+
+      if (user.emergencias.length !== 0) {
+        setEmergencyPending(true);
+      }
       setEmergency(null);
     } catch (error) {
       console.error(error);
@@ -123,7 +127,7 @@ export default function CrimeScreen(props) {
       return;
     }
 
-    const user = getGlobalUser();
+    const user = await getGlobalUser();
     await fetch(baseURL + "/alerts", {
       method: "POST",
       headers: {
@@ -284,7 +288,11 @@ export default function CrimeScreen(props) {
           <FontAwesome name="bullhorn" size={24} color="white" />
         </IconButton>
         <IconButton clicked={getEmergencies}>
-          <FontAwesome name="ambulance" size={24} color="white" />
+          <FontAwesome
+            name="ambulance"
+            size={24}
+            color={emergencyPending ? "red" : "white"}
+          />
         </IconButton>
         <IconButton clicked={getAlerts}>
           <FontAwesome name="warning" size={24} color="white" />
