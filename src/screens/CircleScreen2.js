@@ -217,7 +217,7 @@ export default function CircleScreen() {
                 refreshControl={
                   <RefreshControl
                     refreshing={refreshing}
-                    onRefresh={fetchData}
+                    onRefresh={() => fetchData()}
                   />
                 }
               >
@@ -238,7 +238,7 @@ export default function CircleScreen() {
                 refreshControl={
                   <RefreshControl
                     refreshing={refreshing}
-                    onRefresh={fetchData}
+                    onRefresh={() => fetchData()}
                   />
                 }
               >
