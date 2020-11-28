@@ -28,8 +28,7 @@ function InformationScreen(){
         ];
 
 
-    // Fetch data from api
-    useEffect(() => {
+    const getRequest = () => {
         setRefreshing(true);
         fetch(baseURL + '/informations')
             .then((response) => response.json())
@@ -40,6 +39,11 @@ function InformationScreen(){
             .catch((error) => {
                 console.error(error);
             });
+    }
+
+    // Fetch data from api
+    useEffect(() => {
+        getRequest();
     }, []);
 
 
@@ -59,7 +63,8 @@ function InformationScreen(){
                 {categories.map(item => <Picker.Item key={item.id} label={item.label} value={item.type}/>)}
             </Picker>
             </Card>
-            <ScrollView style={{ marginBottom: 50, marginTop: 20, width: '100%'}}>
+            <ScrollView refreshControl={ <RefreshControl refreshing={refreshing} onRefresh={() => getRequest()} /> }
+                style={{ marginBottom: 50, marginTop: 20, width: '100%'}}>
             {customData.map(element => { return category.type === element.type ? (
                                         <MessageItem key={element._id}
                                             title={element.title}
