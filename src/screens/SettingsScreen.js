@@ -40,6 +40,16 @@ function SettingsScreen({ navigation }) {
     fetchData();
   }, []);
 
+  const preDeleteAccount = () => {
+    Alert.alert("Borrar cuenta", "¿Está segur@ de borrar su cuenta?", [
+      {
+        text: "Aceptar",
+        onPress: deleteAccount,
+      },
+      { text: "Cancelar", onPress: () => {}, style: "cancel" },
+    ]);
+  };
+
   const deleteAccount = () => {
     const user = firebase.auth().currentUser;
     user
@@ -84,11 +94,6 @@ function SettingsScreen({ navigation }) {
 
   const GENERALSETTINGSDATA = [
     {
-      id: "yanomas-v1.0.0-settings-notifications",
-      title: "Notificaciones",
-      icon: "bell",
-    },
-    {
       id: "yanomas-v1.0.0-settings-locationsharing",
       title: "Ubicación",
       icon: "share",
@@ -96,16 +101,6 @@ function SettingsScreen({ navigation }) {
   ];
 
   const UNIVERSALSETTINGSDATA = [
-    {
-      id: "yanomas-v1.0.0-settings-profile",
-      title: "Cuenta",
-      icon: "account",
-    },
-    {
-      id: "yanomas-v1.0.0-settings-privacy",
-      title: "Privacidad y Seguridad",
-      icon: "key",
-    },
     {
       id: "yanomas-v1.0.0-settings-logout",
       title: "Cerrar Sesión",
@@ -252,7 +247,7 @@ function SettingsScreen({ navigation }) {
 
               <IconButton
                 title="Eliminar cuenta"
-                clicked={deleteAccount}
+                clicked={preDeleteAccount}
               ></IconButton>
 
               <Text
