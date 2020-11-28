@@ -94,6 +94,7 @@ export default function CrimeScreen(props) {
       let responseJson = await response.json();
 
       setAlerts(responseJson);
+      setEmergency(null);
     } catch (error) {
       console.error(error);
     }
@@ -145,8 +146,29 @@ export default function CrimeScreen(props) {
     setLoading(false);
   };
 
+  const getEmergencies = async () => {
+    setLoading(true);
+    const user = await getGlobalUser(true);
+    setEmergency(user.emergencias);
+    setAlerts(null);
+    setLoading(false);
+  };
+
+  let emergencyMarkers = emergency
+    ? emergency.map((el) => (
+        <Marker
+          key={el.name + el.date}
+          coordinate={el.location}
+          title={el.name}
+          description={el.date}
+        >
+          <FontAwesome name="ambulance" size={40} color="red" />
+        </Marker>
+      ))
+    : null;
+
   let alertMarkers = null;
-  if (!reporting) {
+  if (!reporting && alerts) {
     alertMarkers = alerts.map((el, i) => {
       let icon = null;
       switch (el.category) {
@@ -261,7 +283,7 @@ export default function CrimeScreen(props) {
         >
           <FontAwesome name="bullhorn" size={24} color="white" />
         </IconButton>
-        <IconButton>
+        <IconButton clicked={getEmergencies}>
           <FontAwesome name="ambulance" size={24} color="white" />
         </IconButton>
         <IconButton clicked={getAlerts}>
@@ -286,6 +308,7 @@ export default function CrimeScreen(props) {
             longitudeDelta: 0.05,
           }}
         >
+          {emergencyMarkers}
           {reportMarker}
           {GPSMarker}
           {alertMarkers}

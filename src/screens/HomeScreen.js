@@ -23,6 +23,7 @@ function HomeScreen({ navigation }) {
   const [alertActive, setAlertActive] = useState(false);
 
   useEffect(() => {
+    getGlobalUser(true);
     registerForPushNotificationsAsync();
   }, []);
 
@@ -64,10 +65,6 @@ function HomeScreen({ navigation }) {
       const user = await getGlobalUser();
 
       updateExpoToken(token.data);
-      await firebase
-        .database()
-        .ref("users/" + user.uid + "/emergencies")
-        .on("value", (snapshot) => console.log(snapshot.val()));
 
       console.log("$$$");
     } catch (error) {
@@ -113,6 +110,11 @@ function HomeScreen({ navigation }) {
           date: date,
           location: location,
         }),
+      });
+      console.log({
+        name: user.name,
+        date: date,
+        location: location,
       });
       let responseJson = await response.json();
 

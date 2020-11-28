@@ -122,11 +122,12 @@ export default function StatsScreen() {
     sum = Object.keys(frecuency)
       .map((key) => frecuency[key])
       .reduce((sum, el) => sum + el);
-
-    data = {
-      labels: Object.keys(frecuency), // optional
-      data: Object.keys(frecuency).map((key) => frecuency[key] / sum),
-    };
+    if (sum !== 0) {
+      data = {
+        labels: Object.keys(frecuency), // optional
+        data: Object.keys(frecuency).map((key) => frecuency[key] / sum),
+      };
+    }
 
     frencuencies = Object.keys(frecuency).map((key) => (
       <Card key={key}>
