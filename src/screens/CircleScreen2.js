@@ -7,12 +7,12 @@ import {
   RefreshControl,
   Alert,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import * as firebase from "firebase";
 
 import currentTheme from "../constants/Theme";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Card from "../components/Card";
 import Input from "../components/Input";
@@ -123,25 +123,25 @@ export default function CircleScreen() {
         <Text style={styles.text}> Nombre: {el.name}</Text>
         <Text style={styles.text}> Correo: {el.email}</Text>
         <View style={{ flex: 1, flexDirection: "row" }}>
-          <IconButton
-            title="Rechazar"
-            clicked={() => rejectPerson(el.email)}
-          />
-          <IconButton
-            title="Aceptar"
-            clicked={() => acceptPerson(el.email)}
-          />
+          <IconButton title="Rechazar" clicked={() => rejectPerson(el.email)} />
+          <IconButton title="Aceptar" clicked={() => acceptPerson(el.email)} />
         </View>
       </Card>
     ));
     myCircle = currentUser.circle.map((el) => (
       <Card key={el}>
         <Text style={styles.text}>
-          {el.name}{"\n"}{"\n"}{el.email}
+          {el.name}
+          {"\n"}
+          {"\n"}
+          {el.email}
         </Text>
         <TouchableOpacity
-            style={styles.buttonDelete}
-            onPress={() => { removePerson(el.email) }}>
+          style={styles.buttonDelete}
+          onPress={() => {
+            removePerson(el.email);
+          }}
+        >
           <Text style={styles.buttonText}>Eliminar</Text>
         </TouchableOpacity>
       </Card>
@@ -154,112 +154,144 @@ export default function CircleScreen() {
   }
 
   return (
-
-      <View>
-        {isAdding === true ? (
-          <View style={{ marginTop: '50%'}}>
-            <Text style={{fontSize: 18, padding: 20}}>Ingrese el correo electrónico de la persona que quiere agregar</Text>
-            <Input
-              onChangeText={setNewPerson}
-              value={newPerson}
-              placeholder="correo"
-              />
-            <TouchableOpacity
-                style={[styles.buttonDelete, {marginTop: 5}]}
-                onPress={() => { addPerson()}}>
-              <Text style={styles.buttonText}>Confirmar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={[styles.buttonDelete, {marginTop: 5}]}
-                onPress={() => { setIsAdding(false)}}>
-              <Text style={styles.buttonText}>Cancelar</Text>
-            </TouchableOpacity>
-          </View>
-            )
-            :
-            (
-    <ScrollView>
-
-      <View style={styles.topView}>
+    <View>
+      {isAdding === true ? (
+        <View style={{ marginTop: "50%" }}>
+          <Text style={{ fontSize: 18, padding: 20 }}>
+            Ingrese el correo electrónico de la persona que quiere agregar
+          </Text>
+          <Input
+            onChangeText={setNewPerson}
+            value={newPerson}
+            placeholder="correo"
+          />
           <TouchableOpacity
-              style={styles.buttonAdd}
-              onPress={() => { pressAdd()}}>
-              <MaterialCommunityIcons name="account-plus" size={50} color={currentTheme.COLORS.ACTIVE} />
+            style={[styles.buttonDelete, { marginTop: 5 }]}
+            onPress={() => {
+              addPerson();
+            }}
+          >
+            <Text style={styles.buttonText}>Confirmar</Text>
           </TouchableOpacity>
           <TouchableOpacity
-              style={styles.buttonAdd}
-              onPress={() => { setViewRequests(true)}}>
-            <MaterialCommunityIcons name="bell" size={50} color={currentTheme.COLORS.ACTIVE} />
+            style={[styles.buttonDelete, { marginTop: 5 }]}
+            onPress={() => {
+              setIsAdding(false);
+            }}
+          >
+            <Text style={styles.buttonText}>Cancelar</Text>
           </TouchableOpacity>
         </View>
-
-      {viewRequests === true ? (
-          <View>
-            {myRequests}
+      ) : (
+        <ScrollView>
+          <View style={styles.topView}>
             <TouchableOpacity
-                style={styles.buttonDelete}
-                onPress={() => { setViewRequests(false)}}>
-              <Text style={styles.buttonText}>Ocultar</Text>
+              style={styles.buttonAdd}
+              onPress={() => {
+                pressAdd();
+              }}
+            >
+              <MaterialCommunityIcons
+                name="account-plus"
+                size={50}
+                color={currentTheme.COLORS.ACTIVE}
+              />
             </TouchableOpacity>
-          </View>)
-          :
-          (
+            <TouchableOpacity
+              style={styles.buttonAdd}
+              onPress={() => {
+                setViewRequests(true);
+              }}
+            >
+              <MaterialCommunityIcons
+                name="bell"
+                size={50}
+                color={currentTheme.COLORS.ACTIVE}
+              />
+            </TouchableOpacity>
+          </View>
+
+          {viewRequests === true ? (
+            <View style={{ height: 450 }}>
               <ScrollView
-                  refreshControl={
-                    <RefreshControl refreshing={refreshing} onRefresh={fetchData} />
-                  }>
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={fetchData}
+                  />
+                }
+              >
+                {myRequests}
+                <TouchableOpacity
+                  style={styles.buttonDelete}
+                  onPress={() => {
+                    setViewRequests(false);
+                  }}
+                >
+                  <Text style={styles.buttonText}>Ocultar</Text>
+                </TouchableOpacity>
+              </ScrollView>
+            </View>
+          ) : (
+            <View style={{ height: 450 }}>
+              <ScrollView
+                refreshControl={
+                  <RefreshControl
+                    refreshing={refreshing}
+                    onRefresh={fetchData}
+                  />
+                }
+              >
                 <Title>Mi círculo ({memberCount}/6)</Title>
                 {myCircle}
               </ScrollView>
-          )
-      }
-
-    </ScrollView>
-
+            </View>
           )}
-      </View>
+        </ScrollView>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   topView: {
     flex: 1,
-    justifyContent: 'space-around',
-    flexDirection: 'row',
+    justifyContent: "space-around",
+    flexDirection: "row",
     backgroundColor: currentTheme.COLORS.ACTIVE,
-    elevation: 10
+    elevation: 10,
   },
   text: {
     color: currentTheme.COLORS.BLACK,
-    marginBottom: '10%',
+    marginBottom: "10%",
     fontSize: 20,
   },
   textInput: {
     marginTop: 10,
     paddingLeft: 10,
     color: currentTheme.COLORS.ACTIVE,
-    fontSize: 20
+    fontSize: 20,
   },
   buttonAdd: {
     height: 100,
     width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 50,
     elevation: 10,
-    marginTop: '5%',
-    marginBottom: '5%',
-    backgroundColor: currentTheme.COLORS.WHITE
+    marginTop: "5%",
+    marginBottom: "5%",
+    backgroundColor: currentTheme.COLORS.WHITE,
   },
   buttonConfirm: {
     height: 40,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '35%',
-    marginLeft: '32%',
+    justifyContent: "center",
+    alignItems: "center",
+    width: "35%",
+    marginLeft: "32%",
     borderRadius: 50,
     elevation: 10,
-    backgroundColor: currentTheme.COLORS.SUCCESS
+    backgroundColor: currentTheme.COLORS.SUCCESS,
   },
   buttonDelete: {
     height: 40,
@@ -272,10 +304,10 @@ const styles = StyleSheet.create({
     elevation: 10,
     marginBottom: 10,
     borderColor: currentTheme.COLORS.SECONDARY,
-    backgroundColor: currentTheme.COLORS.ACTIVE
+    backgroundColor: currentTheme.COLORS.ACTIVE,
   },
   buttonText: {
     fontSize: 15,
-    color: 'white',
+    color: "white",
   },
 });
