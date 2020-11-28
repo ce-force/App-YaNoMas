@@ -30,10 +30,12 @@ function InformationScreen(){
 
     // Fetch data from api
     useEffect(() => {
+        setRefreshing(true);
         fetch(baseURL + '/informations')
             .then((response) => response.json())
             .then((responseJson) => {
                 setCustomData(responseJson);
+                setRefreshing(false);
             })
             .catch((error) => {
                 console.error(error);
