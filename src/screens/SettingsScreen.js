@@ -28,7 +28,7 @@ const thumbMeasure = (width - 48 - 32) / 3;
 function SettingsScreen({ navigation }) {
   const [getGlobalUser, setGlobalUser] = useContext(UserContext);
   const [currentUser, setCurrentUser] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchData() {
@@ -89,7 +89,7 @@ function SettingsScreen({ navigation }) {
       icon: "bell",
     },
     {
-      id:"yanomas-v1.0.0-settings-locationsharing",
+      id: "yanomas-v1.0.0-settings-locationsharing",
       title: "Ubicación",
       icon: "share",
     },
@@ -107,7 +107,7 @@ function SettingsScreen({ navigation }) {
       icon: "key",
     },
     {
-      id:"yanomas-v1.0.0-settings-logout",
+      id: "yanomas-v1.0.0-settings-logout",
       title: "Cerrar Sesión",
       icon: "logout",
     },
@@ -155,6 +155,8 @@ function SettingsScreen({ navigation }) {
       .then(
         () => {
           ToastAndroid.show("Cerrando Sesión...", ToastAndroid.SHORT);
+          setCurrentUser(null);
+          setLoading(true);
           navigation.navigate("Login");
         },
         (error) => {
@@ -211,13 +213,13 @@ function SettingsScreen({ navigation }) {
                     size={28}
                     style={{ color: currentTeme.COLORS.TEXT }}
                   >
-                    {currentUser.name}
+                    {currentUser ? currentUser.name : null}
                   </Text>
                   <Text
                     size={16}
                     style={{ marginTop: 10, color: currentTeme.COLORS.TEXT }}
                   >
-                    {currentUser.email}
+                    {currentUser ? currentUser.email : null}
                   </Text>
                 </Block>
                 <Block middle style={{ marginTop: 10 }}>
@@ -234,7 +236,9 @@ function SettingsScreen({ navigation }) {
                       color: currentTeme.COLORS.TEXT,
                     }}
                   >
-                    {currentUser.circle ? currentUser.circle.length : null}
+                    {currentUser && currentUser.circle
+                      ? currentUser.circle.length
+                      : null}
                   </Text>
                   <Text size={12} color={theme.COLORS.TEXT}>
                     En mí circulo

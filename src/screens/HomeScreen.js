@@ -23,13 +23,18 @@ function HomeScreen({ navigation }) {
   const [alertActive, setAlertActive] = useState(false);
 
   useEffect(() => {
+    getGlobalUser(true);
     registerForPushNotificationsAsync();
   }, []);
 
-  const currentLocation = async () => {
+  const getLocation = async () => {
     let { status } = await Location.requestPermissionsAsync();
     let tmpLocation = await Location.getCurrentPositionAsync({});
-    console.log(tmpLocation);
+    tmpLocation = {
+      latitude: tmpLocation.coords.latitude,
+      longitude: tmpLocation.coords.longitude,
+    };
+    return tmpLocation;
   };
 
   registerForPushNotificationsAsync = async () => {
@@ -60,10 +65,6 @@ function HomeScreen({ navigation }) {
       const user = await getGlobalUser();
 
       updateExpoToken(token.data);
-      await firebase
-        .database()
-        .ref("users/" + user.uid + "/emergencies")
-        .on("value", (snapshot) => console.log(snapshot.val()));
 
       console.log("$$$");
     } catch (error) {
@@ -93,6 +94,9 @@ function HomeScreen({ navigation }) {
 
   const sendEmergency = async () => {
     try {
+      console.log("-----------------EMERGENCY--------------------");
+      const location = await getLocation();
+      const date = new Date().toISOString();
       const user = await getGlobalUser();
       let response = await fetch(baseURL + "/users/emergency", {
         method: "POST",
@@ -101,7 +105,16 @@ function HomeScreen({ navigation }) {
           "Content-Type": "application/json",
           uid: user.uid,
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          name: user.name,
+          date: date,
+          location: location,
+        }),
+      });
+      console.log({
+        name: user.name,
+        date: date,
+        location: location,
       });
       let responseJson = await response.json();
 
@@ -113,6 +126,9 @@ function HomeScreen({ navigation }) {
 
   const sendAlert = async () => {
     try {
+      console.log("--------------------ALERTA-----------------");
+      const location = await getLocation();
+      const date = new Date().toISOString();
       const user = await getGlobalUser();
       let response = await fetch(baseURL + "/users/alert", {
         method: "POST",
@@ -121,7 +137,11 @@ function HomeScreen({ navigation }) {
           "Content-Type": "application/json",
           uid: user.uid,
         },
-        body: JSON.stringify({}),
+        body: JSON.stringify({
+          name: user.name,
+          date: date,
+          location: location,
+        }),
       });
       let responseJson = await response.json();
 
@@ -159,6 +179,7 @@ function HomeScreen({ navigation }) {
       onPress={sendAlert}
     >
       <Text style={{ fontSize: 24, fontWeight: "bold" }}>Estado de Alerta</Text>
+      <Text>(Se notificará a tu círculo)</Text>
     </TouchableOpacity>
   );
 
@@ -168,11 +189,11 @@ function HomeScreen({ navigation }) {
         style={[styles.emergencytBtn, styles.cancelBtn]}
         onPress={cancelAlert}
       >
-        <Text style={{ fontSize: 24 }}>(Estado de Alerta activo)</Text>
+        <Text style={{ fontSize: 24 }}>Emergencia en 5min</Text>
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>
           Desactivar alerta
         </Text>
-        <Text style={{ fontSize: 24 }}>Emergencia en 5min</Text>
+        <Text style={{ fontSize: 24 }}>(Estado de Alerta activo)</Text>
       </TouchableOpacity>
     );
   }
@@ -181,6 +202,7 @@ function HomeScreen({ navigation }) {
     <View style={styles.container}>
       <TouchableOpacity style={styles.emergencytBtn} onPress={sendEmergency}>
         <Text style={{ fontSize: 24, fontWeight: "bold" }}>Emergencia</Text>
+        <Text>(Se notificará a tu círculo)</Text>
       </TouchableOpacity>
       {alertButton}
     </View>
