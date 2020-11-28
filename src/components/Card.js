@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 10,
     margin: 8,
-    elevation: 4,
+    elevation: 2,
     padding: 8,
   },
 });

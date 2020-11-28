@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: "purple",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 4,
+    borderRadius: 8,
     margin: 4,
   },
 });

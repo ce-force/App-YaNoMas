@@ -1,6 +1,6 @@
 export default {
     COLORS: {
-        DEFAULT: '#572364',
+        DEFAULT: 'purple',
         PRIMARY: '#3E7A93',
         SECONDARY: '#5C81AD',
         TEXT: '#32325D',
@@ -15,7 +15,7 @@ export default {
         INPUT: '#DCDCDC',
         INPUT_SUCCESS: '#7BDEB2',
         INPUT_ERROR: '#FCB3A4',
-        ACTIVE: '#572364', //same as primary
+        ACTIVE: 'purple', //same as primary
         BUTTON_COLOR: '#9C26B0', //wtf
         PLACEHOLDER: '#9FA5AA',
         SWITCH_ON: '#5E72E4',

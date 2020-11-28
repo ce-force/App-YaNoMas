@@ -42,7 +42,7 @@ export default function CircleScreen() {
 
   const [currentUser, setCurrentUser] = useState(null);
   const [isAdding, setIsAdding] = useState(false);
-  const [ViewRequests, setViewRequests] = useState(false);
+  const [viewRequests, setViewRequests] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -126,11 +126,11 @@ export default function CircleScreen() {
           <IconButton
             title="Rechazar"
             clicked={() => rejectPerson(el.email)}
-          ></IconButton>
+          />
           <IconButton
             title="Aceptar"
             clicked={() => acceptPerson(el.email)}
-          ></IconButton>
+          />
         </View>
       </Card>
     ));
@@ -154,9 +154,11 @@ export default function CircleScreen() {
   }
 
   return (
+
       <View>
         {isAdding === true ? (
           <View style={{ marginTop: '50%'}}>
+            <Text style={{fontSize: 18, padding: 20}}>Ingrese el correo electrónico de la persona que quiere agregar</Text>
             <Input
               onChangeText={setNewPerson}
               value={newPerson}
@@ -166,6 +168,11 @@ export default function CircleScreen() {
                 style={styles.buttonConfirm}
                 onPress={() => { addPerson()}}>
               <Text style={styles.buttonText}>Confirmar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={[styles.buttonConfirm, {backgroundColor: currentTheme.COLORS.ERROR, marginTop: 5}]}
+                onPress={() => { setIsAdding(false)}}>
+              <Text style={styles.buttonText}>Cancelar</Text>
             </TouchableOpacity>
           </View>
             )
@@ -177,28 +184,40 @@ export default function CircleScreen() {
       }
     >
 
-        <View style={styles.topView}>
+      <View style={styles.topView}>
           <TouchableOpacity
               style={styles.buttonAdd}
               onPress={() => { pressAdd()}}>
-              <MaterialCommunityIcons name="account-plus" size={50} color={currentTheme.COLORS.SUCCESS} />
+              <MaterialCommunityIcons name="account-plus" size={50} color={currentTheme.COLORS.ACTIVE} />
           </TouchableOpacity>
           <TouchableOpacity
               style={styles.buttonAdd}
-              onPress={() => { addPerson()}}>
-            <MaterialCommunityIcons name="bell" size={50} color={currentTheme.COLORS.SUCCESS} />
+              onPress={() => { setViewRequests(true)}}>
+            <MaterialCommunityIcons name="bell" size={50} color={currentTheme.COLORS.ACTIVE} />
           </TouchableOpacity>
         </View>
 
-      <View  style={{marginTop: 50}}>
-        {myRequests}
-        <Title >Mi círculo ({memberCount}/6)</Title>
-        {myCircle}
-      </View>
+      {viewRequests === true ? (
+          <View>
+            {myRequests}
+            <TouchableOpacity
+                style={styles.buttonDelete}
+                onPress={() => { setViewRequests(false)}}>
+              <Text style={styles.buttonText}>Ocultar</Text>
+            </TouchableOpacity>
+          </View>)
+          :
+          (
+              <View>
+                <Title>Mi círculo ({memberCount}/6)</Title>
+                {myCircle}</View>
+          )
+      }
+
     </ScrollView>
 
           )}
-            </View>
+      </View>
   );
 }
 
@@ -208,6 +227,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'row',
     backgroundColor: currentTheme.COLORS.ACTIVE,
+    elevation: 10
   },
   text: {
     color: currentTheme.COLORS.BLACK,
@@ -227,9 +247,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 50,
     elevation: 10,
-    marginTop: '15%',
-    marginBottom: -45,
-    borderColor: currentTheme.COLORS.SECONDARY,
+    marginTop: '5%',
+    marginBottom: '5%',
     backgroundColor: currentTheme.COLORS.WHITE
   },
   buttonConfirm: {
@@ -240,7 +259,6 @@ const styles = StyleSheet.create({
     marginLeft: '32%',
     borderRadius: 50,
     elevation: 10,
-    borderColor: currentTheme.COLORS.SECONDARY,
     backgroundColor: currentTheme.COLORS.SUCCESS
   },
   buttonDelete: {
@@ -253,7 +271,7 @@ const styles = StyleSheet.create({
     elevation: 10,
     marginBottom: 10,
     borderColor: currentTheme.COLORS.SECONDARY,
-    backgroundColor: currentTheme.COLORS.SUCCESS
+    backgroundColor: currentTheme.COLORS.ACTIVE
   },
   buttonText: {
     fontSize: 20,
