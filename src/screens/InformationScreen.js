@@ -1,18 +1,21 @@
-import React from "react";
-import {StyleSheet, Text, View, SafeAreaView, FlatList, Image, ScrollView} from "react-native";
+import React, {useEffect, useState} from "react";
+import {StyleSheet, Text, View, SafeAreaView, FlatList, Image, ScrollView, RefreshControl} from "react-native";
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import currentTeme from "../constants/Theme";
 
-import { Card } from 'react-native-elements'
+import Card from "../components/Card";
 import {Picker} from '@react-native-picker/picker';
 import {MessageItem} from "../components/MessageItem";
-
-const customData = require('../../assets/MessageData.json');
+import {baseURL} from "../constants/utils";
 
 
 
 
 function InformationScreen(){
+
+    const [refreshing, setRefreshing] = useState(false);
+
+    const [customData, setCustomData] = useState([]);
 
     const [category, setCategory] = React.useState({
         type: 'info',
@@ -25,12 +28,26 @@ function InformationScreen(){
         ];
 
 
+    // Fetch data from api
+    useEffect(() => {
+        fetch(baseURL + '/informations')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                setCustomData(responseJson);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }, []);
+
+
     function handleChange(value) {
         setCategory({type: value})
     }
 
     return (
         <View style={styles.container}>
+            <Card style={{marginTop: 15}}>
             <Picker
                 selectedValue={category.type}
                 onValueChange={value => handleChange(value)}
@@ -39,13 +56,14 @@ function InformationScreen(){
                 itemStyle={{ color:'red', fontWeight:'900', fontSize: 18, padding:30}}>
                 {categories.map(item => <Picker.Item key={item.id} label={item.label} value={item.type}/>)}
             </Picker>
-            <ScrollView style={{ marginBottom: 50, marginTop: 50}}>
+            </Card>
+            <ScrollView style={{ marginBottom: 50, marginTop: 20, width: '100%'}}>
             {customData.map(element => { return category.type === element.type ? (
-                                        <MessageItem key={element.id}
+                                        <MessageItem key={element._id}
                                             title={element.title}
                                             image={element.image}
                                             message={element.message}/>)
-                : (<View key={element.id}/>)})
+                : (<View key={element._id}/>)})
             }
 
             </ScrollView>
@@ -72,10 +90,9 @@ const styles = StyleSheet.create({
       paddingLeft: 10
     },
     picker: {
-        top: 50,
         width: 260,
-        fontSize:10,
-        borderRadius: 10,
+        fontSize:20,
+        color: currentTeme.COLORS.BLACK
     }
   });
 

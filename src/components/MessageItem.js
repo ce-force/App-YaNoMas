@@ -2,14 +2,13 @@ import {Text, View} from "react-native";
 import {Card} from "react-native-elements";
 import React from "react";
 
-export function MessageItem({ title, image, message }) {
+import currentTeme from "../constants/Theme";
+export function MessageItem({ image, message }) {
     return (
 
         <View>
 
             <Card style={{borderRadius: 8, marginTop: 50}}>
-                <Card.Title>{title}</Card.Title>
-                <Card.Divider/>
                 <Text style={{marginBottom: 10}}>
                     {message}
                 </Text>

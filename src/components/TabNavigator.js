@@ -22,17 +22,17 @@ const TabNavigator = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName = "home";
-          if (route.name === "Home") {
+          if (route.name === "Inicio") {
             iconName = focused ? "home" : "home";
-          } else if (route.name === "Crimes") {
+          } else if (route.name === "Crimenes") {
             iconName = focused ? "fire" : "fire";
-          } else if (route.name === "Stats") {
+          } else if (route.name === "Estadisticas") {
             iconName = focused ? "chart-bar" : "chart-bar";
-          } else if (route.name === "Circle") {
+          } else if (route.name === "Circulo") {
             iconName = focused ? "circle" : "circle-outline";
-          } else if (route.name === "Information") {
+          } else if (route.name === "Info") {
             iconName = focused ? "information-variant" : "information-variant";
-          } else if (route.name === "Settings") {
+          } else if (route.name === "Configuración") {
             iconName = focused ? "settings" : "settings";
           }
 
@@ -45,12 +45,12 @@ const TabNavigator = () => {
         inactiveTintColor: "gray",
       }}
     >
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Crimes" component={CrimesScreen} />
-      <Tab.Screen name="Stats" component={StatsScreen} />
-      <Tab.Screen name="Circle" component={CircleScreen} />
-      <Tab.Screen name="Information" component={InformationScreen} />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen name="Inicio" component={HomeScreen} />
+      <Tab.Screen name="Crimenes" component={CrimesScreen} />
+      <Tab.Screen name="Estadisticas" component={StatsScreen} />
+      <Tab.Screen name="Circulo" component={CircleScreen} />
+      <Tab.Screen name="Info" component={InformationScreen} />
+      <Tab.Screen name="Configuración" component={SettingsScreen} />
     </Tab.Navigator>
   );
 };
