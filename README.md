@@ -26,6 +26,35 @@ todos podemos ser quienes somos y donde sea que estemos.
 
 ## Pantallas de la Aplicación
 
+<table>
+  <tr>
+    <td>
+      <img src="https://res.cloudinary.com/dek4evg4t/image/upload/v1606545855/yanom%C3%A1s/app/Screenshot_2020-11-28-00-30-04.png" width="450">
+    </td>
+    <td>
+      <img src="https://res.cloudinary.com/dek4evg4t/image/upload/v1606545855/yanom%C3%A1s/app/Screenshot_2020-11-28-00-29-26.png" width="450">
+    </td>
+     <td>
+      <img src="https://res.cloudinary.com/dek4evg4t/image/upload/v1606545855/yanom%C3%A1s/app/Screenshot_2020-11-28-00-30-24.png" width="450">
+    </td>
+  </tr>
+</table>
+
+<table>
+  <tr>
+    <td>
+      <img src="https://res.cloudinary.com/dek4evg4t/image/upload/v1606545855/yanom%C3%A1s/app/Screenshot_2020-11-28-00-30-29.png" width="450">
+    </td>
+    <td>
+      <img src="https://res.cloudinary.com/dek4evg4t/image/upload/v1606545855/yanom%C3%A1s/app/Screenshot_2020-11-28-00-30-47.png" width="450">
+    </td>
+     <td>
+      <img src="https://res.cloudinary.com/dek4evg4t/image/upload/v1606546218/yanom%C3%A1s/app/Screenshot_2020-11-28-00-50-04.png" width="450">
+    </td>
+  </tr>
+</table>
+
+
 ## Documentación
 
 Si desea leer sobre el uso de [YaNoMas](https://github.com/https://github.com/ce-force/YaNoMas) y su documentación técnica. Diríjase a: 
